@@ -1,6 +1,6 @@
 <?php
  /*
- This file is part of Scorecard.
+ This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holland. 
 
     Scorecard is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
