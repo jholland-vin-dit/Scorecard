@@ -1,0 +1,191 @@
+BODY {
+	margin: 0 auto;
+	 background-color: #ccffcc;	
+}
+
+Table { 
+ font-family: Arial, Helvetica, sans-serif;
+ font-size: .9em;
+  color: #FFFFFF;
+	font-weight: bold;
+	text-align: left;
+ background-color: #0c7a40;
+ }
+
+table.toptable { 
+ font-family: Arial, Helvetica, sans-serif;
+ font-size: .9em;
+  color: GREEN;
+	font-weight: bold;
+	text-align: left;
+ background-color: GREEN;
+}
+
+table.votebartable { 
+	width: 500px;
+	margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9pt;
+  color: #033333;
+	font-weight: normal;
+	text-align: left;
+  	background-color: #ECF6CE;
+	border: solid;
+  border-width: 1px 1px 1px 1px;
+  border-color: #0c7a40;
+}
+
+tr.votebartable {
+  background-color: tan;
+  border: solid;
+  border-width: 0px 0px 0px 0px;
+  border-color: #0c7a40;
+}
+
+td.votebartable { 
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9 pt;
+ 	text-align: left;
+  color: #033333;
+  font-weight: normal;
+  background-color: #FFCC99;
+	vertical-align:top;
+ }
+ 
+
+table.bottomtable { 
+	width: 840px;
+	margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9pt;
+  color: #033333;
+	font-weight: normal;
+	text-align: left;
+	padding-top:.1em;
+  	padding-right:.1em;
+  	padding-left:.1em;
+  	padding-bottom:.1em;
+  	background-color: #ECF6CE;
+	border: solid;
+  border-width: 1px 1px 1px 1px;
+  border-color: #0c7a40;
+}
+
+tr.bottomtable {
+  background-color: tan;
+  border: solid;
+  border-width: 1px 1px 1px 1px;
+  border-color: #0c7a40;
+}
+
+td.bottomtable { 
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9 pt;
+ 	text-align: left;
+  color: #033333;
+  font-weight: normal;
+  background-color: #FFCC99;
+	vertical-align:top;
+	padding-top:.1em;
+  padding-right:.1em;
+  padding-left:.1em;
+  padding-bottom:.1em;
+ }
+ 
+ table.bottomtable-top { 
+  	margin: 0 auto;
+  	font-family: Arial, Helvetica, sans-serif;
+  	font-size: 9pt;
+  	color: #033333;
+	font-weight: normal;
+	text-align: left;
+	padding-top:.1em;
+  	padding-right:.1em;
+  	padding-left:.1em;
+  	padding-bottom:.1em;
+  	background-color: #BEBEBE;
+	border: solid;
+  	border-width: 1px 1px 1px 1px;
+  	border-color: #0c7a40;
+}
+
+tr.bottomtable-top {
+  background-color: tan;
+  border: solid;
+  border-width: 1px 1px 1px 1px;
+  border-color: #0c7a40;
+}
+
+td.bottomtable-top { 
+  	font-family: Arial, Helvetica, sans-serif;
+  	font-size: 9 pt;
+	text-align: left;
+  	color: #033333;
+  	font-weight: normal;
+  	background-color: #FFCC99;
+	vertical-align:top;
+	padding-top:.1em;
+  	padding-right:.1em;
+  	padding-left:.1em;
+  	padding-bottom:.1em;
+ }
+
+td.toptable { 
+  	font-family: Arial, Helvetica, sans-serif;
+  	font-size: .95em;
+ 	text-align: left;
+  	color: #033333;
+  	font-weight: normal;
+  	background-color: #FFFFFF;
+	vertical-align:top;
+	padding-top:.0em;
+  	padding-right:.0em;
+  	padding-left:.0em;
+  	padding-bottom:.0em;
+ }
+
+table.formtable { 
+ 	font-family: Arial, Helvetica, sans-serif;
+ 	font-size: .9em;
+  	color: BLACK;
+	font-weight: bold;
+	text-align: left;
+ 	background-color: TAN; 
+ }
+ 
+td.formtable { 
+  	font-family: Arial, Helvetica, sans-serif;
+  	font-size: 10pt;
+	text-align: left;
+  	color: BLACK;
+  	font-weight: normal;
+  	background-color: BLACK;
+	vertical-align:top;
+	padding-top:.4em;
+  	padding-right:.4em;
+  	padding-left:.4em;
+  	padding-bottom:.4em;
+	border: solid;
+  	border-width: 1px 1px 1px 1px;
+  	border-color: #0c7a40;
+ }
+
+ul{
+	color: green;
+	text-align: left;
+} 
+
+li{
+	color: green;
+	text-align: left;
+	}  
+ 
+H3{color:brown;font-size:12pt;font-family:Verdana, Arial, Helvetica, sans-serif; text-align:center;}
+TH{color:blue;font-size:8pt;font-family:Verdana, Arial, Helvetica, sans-serif;}
+A:Link{color:Brown;font-size:9pt;font-family:Verdana, Arial, Helvetica, sans-serif;font-weight:normal; 
+text-decoration: none;} 
+A:Visited{color:Brown;font-size:9pt;font-family:Verdana, Arial, Helvetica, sans-serif;
+font-weight:normal; text-decoration: none;}
+H2{color:blue;font-size:14pt;font-family:Verdana, Arial, Helvetica, sans-serif;}
+
+-->

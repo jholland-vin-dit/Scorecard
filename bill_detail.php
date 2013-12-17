@@ -1,0 +1,109 @@
+<?php 
+session_start();
+?>
+<?php include 'connection_string.php'; ?>
+<?php include 'header.php'; ?>
+<?php
+$body_year=$_SESSION["body_year"];
+
+$legislation_id=$_GET["legislation_id"];
+$_SESSION["legislation_id"]=$legislation_id;
+$str_bill = "SELECT l.issue_id,i.title issue_title,l.issue_id,l.legislation_name legislation_name, " .
+" l.description description, l.legislation_date legislation_date , b.name,y.year " .
+"FROM `tbl_legislation` l, tbl_bodies b, tbl_years y,tbl_issues i " .
+" WHERE l.year = y.year " .
+" AND l.body_id = b.id " .
+" AND i.id=l.issue_id " .
+" and l.id = " . $legislation_id;
+
+//echo $str_bill;
+
+$sql_bill = mysqli_query($link, $str_bill);
+$bill_count = mysqli_num_rows($sql_bill);
+$row_body = mysqli_fetch_assoc($sql_bill);
+
+?>
+<table class=bottomtable>
+<tr><td>
+<span style="text-align:center"><h3>
+<?php 
+echo $row_body["legislation_name"];
+?>
+</h3></span>
+</td></tr></table>
+<?php
+
+
+echo "<table class=bottomtable>";
+echo "<tr><th bgcolor=\"orange\">Issue Title</th><th bgcolor=\"orange\">Date</th><th bgcolor=\"orange\">Description</th><th bgcolor=\"orange\">Body/Year</th></tr>\n";
+
+echo "<tr><td>";
+echo "<a href=\"legislation_listing.php?issue_id="
+.$row_body["issue_id"]
+."\">";
+echo $row_body["issue_title"]."</a>";
+echo "</td><td>"
+.$row_body["legislation_date"]
+."</td><td>"
+.$row_body["description"]
+."</td><td><a href=\"index.php\">"
+.$row_body["name"]."/".$_SESSION["body_year"];
+echo "</td></tr>";
+echo "</table>";
+
+$str_votes= "SELECT mtx.party_id,issue_id, legislation_name,votes.legislation_id,voter_id,vote,first_name,last_name, ";
+$str_votes .= "vote_type_id,desired_vote_type_id FROM tbl_legislation legislation ";
+$str_votes .= " INNER JOIN tbl_votes votes ON votes.legislation_id = legislation.id  ";
+
+$str_votes .= " inner join tbl_voters voters on votes.voter_id=voters.id  ";
+$str_votes .= "inner join tbl_vote_types vote_types on votes.vote_type_id=vote_types.id  ";
+
+$str_votes .= "inner join mtx_legis_party_desired_vote_types mtx on mtx.legislation_id=legislation.id  ";
+
+$str_votes .= " WHERE legislation.id=".$legislation_id." ";
+$str_votes .= " and mtx.party_id=3 ";
+$str_votes .= " order by voter_id, legislation_date  ";
+
+$str_votes .= ";";
+
+//echo $str_votes;
+
+$sql_votes = mysqli_query($link, $str_votes);
+$votes_count = mysqli_num_rows($sql_votes);
+//$row_votes = mysqli_fetch_assoc($sql_votes);	
+
+// echo "<br>votes_count: ".$votes_count . "<br>";
+
+//echo "<table  bgcolor='#F5DA81' width=380 cdllpadding=0 cellspacing=0 border =0>";
+echo "<table class=bottomtable>";
+echo "<tr><th bgcolor=\"lightblue\">Council Member</th><th bgcolor=\"lightblue\">Vote</th></tr>\n";
+// print list of voters and their votes
+
+while($row_votes = mysqli_fetch_assoc($sql_votes)){
+
+   $voter_link = "<a href=\"voter_detail.php?voter_id=".$row_votes["voter_id"]."\">".$row_votes["first_name"]." ".$row_votes["last_name"]."</a>";
+	if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
+           $spancolor ="bgcolor=\"lightgreen\"";
+	} else {
+           $spancolor="";
+	}
+
+   $vote_text = "<td ".$spancolor." >".$row_votes["vote"]."</td>";
+
+			echo "<tr>";
+                        echo "<td " .$spancolor. " >".$voter_link."</td>";
+
+			echo $vote_text;
+			echo "</tr>\n";
+
+}  // while votes
+echo "<tr><td colspan=3><hr></td></tr>";
+    /* free result set */
+mysqli_free_result($sql_votes);
+mysqli_free_result($sql_legislation);
+mysqli_close() // do this for tidyness
+// now to leave PHP and go back to straight HTML
+?>
+</table>
+</body>
+</html>

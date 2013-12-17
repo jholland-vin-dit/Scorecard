@@ -1,0 +1,23 @@
+1. bodies has three associated dropdowns
+	bodies
+	vote_types (w/body)
+	parties (w/body)
+	big_issues (w/body)
+
+2. w/ secondary dropdown:
+
+	issues w/big_issue (w/body)
+	voters w/party (w/body)
+	voters w/body (w/year)
+	legislation w/issue  (w/big_issue)
+
+	
+3. w/ secondary and tertiary dropdown:
+	votes w/voter w/legislation
+
+no edit	
+	years	
+	
+	
+Use session to keep body
+	
