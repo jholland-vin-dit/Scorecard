@@ -23,6 +23,7 @@ session_start();
 ?>
 <?php include 'connection_string.php'; ?>
 <?php include 'header.php'; ?>
+
 <?php
 $body_year=$_SESSION["body_year"];
 
@@ -43,9 +44,13 @@ $bill_count = mysqli_num_rows($sql_bill);
 $row_body = mysqli_fetch_assoc($sql_bill);
 
 ?>
+<table class="bottomtable">
+<tr><td><h3>Issue: 
+<?php echo $row_body["issue_title"] ?>
+</td></tr></table>
 <table class=bottomtable>
 <tr><td>
-<span style="text-align:center"><h3>
+<span style="text-align:center"><h3> Bill:
 <?php 
 echo $row_body["legislation_name"];
 ?>
@@ -55,19 +60,18 @@ echo $row_body["legislation_name"];
 
 
 echo "<table class=bottomtable>";
-echo "<tr><th bgcolor=\"orange\">Issue Title</th><th bgcolor=\"orange\">Date</th><th bgcolor=\"orange\">Description</th><th bgcolor=\"orange\">Body/Year</th></tr>\n";
+echo "<tr>
+<th bgcolor=\"orange\">Description</th>
+<th bgcolor=\"orange\">Date</th>
+<th bgcolor=\"orange\">Body</th></tr>\n";
 
-echo "<tr><td>";
-echo "<a href=\"legislation_listing.php?issue_id="
-.$row_body["issue_id"]
-."\">";
-echo $row_body["issue_title"]."</a>";
-echo "</td><td>"
+echo "<tr><td>"
+.$row_body["description"]
+."</td><td>"
 .$row_body["legislation_date"]
 ."</td><td>"
-.$row_body["description"]
-."</td><td><a href=\"index.php\">"
-.$row_body["name"]."/".$_SESSION["body_year"];
+."<a href=\"index.php\">"
+.$row_body["name"];
 echo "</td></tr>";
 echo "</table>";
 

@@ -94,10 +94,10 @@ while($row_ratings = mysqli_fetch_assoc($sql_ratings)){
   echo "<tr style=\"height:20px;\">\n";
 
   for ($n=0;$n<$num_of_green_cells;$n++)
-    {echo "<td width=\"1px\" style=\"padding:0;margin:0;background-color:green;\"> </td>";
+    {echo "<td width=\"1px\" style=\"padding:0;margin:0;background-color:#399C2C;\"> </td>";
     }
   for ($n=0;$n<$TOTAL_CELLS-$num_of_green_cells;$n++){
-    echo "<td width=\"1px\" style=\"padding:0;margin:0;background-color:red;\"> </td>";
+    echo "<td width=\"1px\" style=\"padding:0;margin:0;background-color:#535E51;\"> </td>";
   }
   echo "</tr></table></td>\n";
   echo "</tr>\n";
