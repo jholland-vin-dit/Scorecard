@@ -119,7 +119,7 @@ echo "<tr>";
 echo "<td valign=top  bgcolor=#ACFA58>";
 echo "Date: </td>"; 
 echo "<td valign=top  bgcolor=#ACFA58>";
-echo "<input size=10 maxlength=10 type=text name='legislation_date' value='".$legislation_date."'></td></tr>";
+echo "<input size=10 maxlength=10 type=text id='datepicker' name='legislation_date' value='".$legislation_date."'></td></tr>";
 echo "<tr>";
 echo "<td valign=top  bgcolor=#ACFA58> ";
 echo "Description: </td>"; 

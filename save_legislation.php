@@ -47,6 +47,34 @@ $description=mysqli_real_escape_string($link, $_POST["description"]);
 $desired_vote_type_id=$_POST["desired_vote_type"];
 
 
+//date should be YYYY-MM-DD
+
+$year = substr($legislation_date,0,4);
+$month = substr($legislation_date,5,2);
+$day = substr($legislation_date,8,2);
+
+echo "$year   $month    $day";
+
+$gooddate = true;
+$errors=false;    
+$errormsgs="";
+if (is_numeric($year) && is_numeric($month) && is_numeric($day)) {
+	
+	if (!checkdate($month,$day,$year)) {	
+		$gooddate = false;
+		$errormsgs .= "invalid date";
+}
+} else {
+	$gooddate = false;
+	$errormsgs .= "non-numeric date";
+}
+
+if (!$gooddate) {
+	$errors = true;
+}
+
+echo $legislation_date;
+
 //echo $event_id."<br>";
 //echo $title."<br>";
 //echo $subtitle."<br>";
@@ -127,6 +155,10 @@ if ($adding){
 //echo "<br>".$str_tbl_votes;
 
 // xxx
- header('Location: index.php?id='.$legislation_id.'');
+ if (!$errors) { header('Location: index.php?id='.$legislation_id.'');
+} else {
+header('Location: errors.php?errormsgs='.urlencode($errormsgs));
+
+}
 
 ?>

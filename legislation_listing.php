@@ -36,12 +36,9 @@ $row_issue = mysqli_fetch_assoc($sql_issue);
 // echo $str_issue;
 
 echo "<table class=bottomtable>"; 
-echo "<tr><td colspan=3><h3>Issue:".$row_issue["title"]."</td><td><a href=\"edit_issue.php?id=".$row_issue["id"]."\">edit</a></h3>\n</td></tr>";
-echo "<th bgcolor=orange>SubTitle</th><th bgcolor=orange>Description</th><th bgcolor=orange>Pro environment</th><th bgcolor=orange>Synopsis</th>";
+echo "<tr><td colspan=3><h3>Issue: ".$row_issue["title"]."</td><td><a href=\"edit_issue.php?id=".$row_issue["id"]."\">edit</a></h3>\n</td></tr>";
 echo "<tr>";
-echo "<td>".$row_issue["subtitle"]."</td>";
-echo "<td valign=top>".$row_issue["description"]."</td><td>".$row_issue["pro_environment_vote"]."</td>";
-echo "<td valign=top>".$row_issue["synopsis"]."</td>";
+echo "<td valign=top>".$row_issue["description"]."</td>";
 echo "</tr>";
 echo "</table>";
 
@@ -120,7 +117,7 @@ $legislation_issues_to_view = " = " . $issue_id;
 $heading_clause = "for this issue";
 ?>
 
-<?php  include 'voters_ratings.php' ; ?>
+<?php  include 'http://192.168.61.98/Scorecard/voters_ratings.php' . '?issue_id=' . $issue_id . '&heading_clause=' . urlencode($heading_clause) ; ?>
 
 <?php
 /*

@@ -1,7 +1,6 @@
 <?php
  /*
- This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holla
-nd.
+ This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holla nd.
 
     Scorecard is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -26,6 +25,20 @@ nd.
 	</title>
 	  	<link rel="stylesheet" type="text/css" href="css/general.css" />
   		<link rel="stylesheet" type="text/css" href="css/calendar.css" />
+
+<script type="text/javascript" src="script/jquery-1.10.2.min.js"></script>
+
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+
+<script>
+$(function() {
+$( "#datepicker" ).datepicker();
+    $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd");
+});
+</script>
   </head>
 <body>
 <?php include 'connection_string.php'; ?>
@@ -59,4 +72,7 @@ echo $row_body["name"]."/".$body_year ;
 echo "</td>" ;
 echo "</tr>";
 echo "</table>";
+
+echo "<br/>";
+echo "<a href=\"index.php\">Return to front page</a>";
 ?>
