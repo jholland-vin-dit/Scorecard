@@ -1,7 +1,6 @@
 <?php
  /*
- This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holla
-nd.
+ This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holland.
 
     Scorecard is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -27,11 +26,11 @@ if($event_id=='add'){
 }else{
 	$adding=false;
 }
-$title=mysqli_real_escape_string($link, $_POST["title"]);
-$subtitle=mysqli_real_escape_string($link, $_POST["subtitle"]);
-$description=mysqli_real_escape_string($link, $_POST["description"]);
-$pro_environment_vote=mysqli_real_escape_string($link, $_POST["pro_environment_vote"]);
-$synopsis=mysqli_real_escape_string($link, $_POST["synopsis"]);
+$title=pg_escape_string($link, $_POST["title"]);
+$subtitle=pg_escape_string($link, $_POST["subtitle"]);
+$description=pg_escape_string($link, $_POST["description"]);
+$pro_environment_vote=pg_escape_string($link, $_POST["pro_environment_vote"]);
+$synopsis=pg_escape_string($link, $_POST["synopsis"]);
 $big_issue_id=$_POST["big_issue"];
 
 //echo $event_id."<br>";
@@ -50,13 +49,13 @@ if(!$adding){
 	$str_issue .= "(title, subtitle, description, pro_environment_vote, synopsis, big_issue_id) ";
 	$str_issue .= "VALUES ('$title', '$subtitle', '$description', '$pro_environment_vote', '$synopsis', $big_issue_id)";
 }
-//echo $str_issue;
-$sql_issue = mysqli_query($link, $str_issue);
+echo $str_issue;
+$sql_issue = pg_query($link, $str_issue);
 
 // xxx
-//$row_issue = mysqli_fetch_assoc($sql_issue);
+//$row_issue = pg_fetch_assoc($sql_issue);
 //$xx= "Location: edit_issue.php?id=".$event_id."";
 //echo $xx
-header('Location: index.php?id='.$event_id.'');
+//header('Location: index.php?id='.$event_id.'');
 
 ?>

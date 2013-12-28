@@ -39,7 +39,7 @@ if (isset($id)){
 
 include ("connection_string.php");
 	$str_big_issues = "select * from tbl_big_issues ";
-	if($sql_big_issues = mysqli_query($link, $str_big_issues))
+	if($sql_big_issues = pg_query($link, $str_big_issues))
 	{
 		//echo "yes";
 	}
@@ -59,9 +59,9 @@ if(!$adding){
 	// Get and print menu links
 	$str_issue = "select * from tbl_issues ";
 	$str_issue .= "where id=".$id.";" ;
-	$sql_issue = mysqli_query($link, $str_issue);
+	$sql_issue = pg_query($link, $str_issue);
 	// xxx
-	$row_issue = mysqli_fetch_assoc($sql_issue);
+	$row_issue = pg_fetch_assoc($sql_issue);
 	// echo $str_issue;
 	$title=htmlspecialchars($row_issue["title"], ENT_QUOTES);
 	$subtitle=htmlspecialchars($row_issue["subtitle"], ENT_QUOTES);
@@ -70,7 +70,7 @@ if(!$adding){
 	$synopsis=htmlspecialchars($row_issue["synopsis"], ENT_QUOTES);
 	echo "<td bgcolor=lightblue align=left>";	
 	echo "<select name=big_issue>";
-	while($row_big_issues = mysqli_fetch_assoc($sql_big_issues))
+	while($row_big_issues = pg_fetch_assoc($sql_big_issues))
 	{
 		if ($row_issue["big_issue_id"]==$row_big_issues["id"]){
 			$selected=" selected ";
@@ -87,7 +87,7 @@ if(!$adding){
 }else{
 	echo "<td bgcolor=lightblue align=left>";
 		echo "<select name=big_issue>";
-	while($row_big_issues = mysqli_fetch_assoc($sql_big_issues))
+	while($row_big_issues = pg_fetch_assoc($sql_big_issues))
 	{
 		echo "<option value='".$row_big_issues["id"]."' >".$row_big_issues["name"]."</option>";
 	}
@@ -129,7 +129,7 @@ echo " <textarea name='synopsis' cols='50' rows='10' >".$synopsis."</textarea></
 echo "<tr>";
 echo "<td valign=top bgcolor=#ACFA58 colspan=3> ";
 if(!$adding){
-	mysqli_free_result($sql_issue);
+	
 	echo " <input type=hidden name='event_id' value=".$id.">";
 	echo "<input type=submit value='Save Issue'>";
 }else{
@@ -141,7 +141,7 @@ echo "</td></tr>";
 echo "</form>";
 echo "</table>";
 
-//$clean_string = mysql_real_escape_string($string);
+
 // $output = stripslashes($db_string);
 
 ?>

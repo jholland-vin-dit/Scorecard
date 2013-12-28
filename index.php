@@ -19,19 +19,19 @@
 ?>
 <?php 
 session_start();
-$issue_id=$_GET["issue_id"];
-$_SESSION["issue_id"]=$issue_id;
-$_SESSION["body_id"]=$body_id;
+//$issue_id=$_GET["issue_id"];
+//$_SESSION["issue_id"]=$issue_id;
+//$_SESSION["body_id"]=$body_id;
 
-if ($_GET["body_year"] == null) {
-  	if ($_SESSION["body_year"] <> null){
-  		$body_year = $_SESSION["body_year"];
-  	}else{
+//if ($_GET["body_year"] == null) {
+ // 	if ($_SESSION["body_year"] <> null){
+  //		$body_year = $_SESSION["body_year"];
+  //	}else{
       	$body_year = "2013";
-	}
-} else {
-  $body_year="" + $_GET["body_year"];
-}
+//	}
+//} else {
+  //$body_year="" + $_GET["body_year"];
+//}
 $_SESSION["body_year"]=$body_year;
 ?>
 <?php
@@ -79,8 +79,7 @@ selectObj.form.submit();
 <td width="35%"> 
     <?php 
         /* check connection */
-      if (mysqli_connect_errno()) {
-	printf("Connect failed: %s\n", mysqli_connect_error());
+      if (pg_last_error()) {
 	exit();
       }
      echo "<br>";
@@ -96,8 +95,8 @@ selectObj.form.submit();
 		$color_toggle=true;
 
 echo "<tr><td><h1>Issues:</h1></td></tr> ";
-      if ($sql_issues = mysqli_query($link, $sql_issues)) {
-      	while($row_issues = mysqli_fetch_assoc($sql_issues))
+      if ($sql_issues = pg_query($link, $sql_issues)) {
+      	while($row_issues = pg_fetch_assoc($sql_issues))
 
 		{
 			if (!$color_toggle){
@@ -113,7 +112,7 @@ echo "<tr><td><h1>Issues:</h1></td></tr> ";
 	  		" and tbl_legislation.year = " . $body_year . ";";
 
 			echo "<tr>\n";
-	  		if ($sql_legislation = mysqli_query($link, $str_legislation)){
+	  		if ($sql_legislation = pg_query($link, $str_legislation)){
 	           	echo "<td valign=top bgcolor=".$current_color."><font size=4><b>\n";
 	    	    echo "<a href=\"legislation_listing.php?issue_id=".$row_issues["issue_id"]."\">\n";
 	    	    echo $row_issues["title"]."</a></b></font>\n";
@@ -122,9 +121,9 @@ echo "<tr><td><h1>Issues:</h1></td></tr> ";
        } //while
      } //if
 	  echo "</table>\n";
-	  mysqli_free_result($sql_voters);
-	  mysqli_free_result($sql_legislation);
-mysqli_close(); // do this for tidyness
+	  
+	  
+pg_close(); // do this for tidyness
 	    // now to leave PHP and go back to straight HTML
 //echo "end s:" .$_SESSION["body_year"]."<br>";
 

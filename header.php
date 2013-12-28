@@ -1,8 +1,8 @@
 <?php
  /*
- This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holla nd.
 
-    Scorecard is free software: you can redistribute it and/or modify
+ This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holla nd. 
+ Scorecard is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
@@ -54,16 +54,18 @@ $all_bills=true;
 <!--?php include 'list_sessions.php'; ?-->
 <?php
 /* check connection */
-if (mysqli_connect_errno()) {
-    printf("Connect failed: %s\n", mysqli_connect_error());
+if (pg_last_error()) {
     exit();
 }
 // Get and print leg. body
 $str_body = "SELECT * FROM tbl_bodies WHERE id= 1 ";
-if ($sql_body = mysqli_query($link, $str_body)) {
-   // printf("Select returned %d rows.\n", mysqli_num_rows($sql_names));
+if ($sql_body = pg_query($link, $str_body)) {
+    printf("Select returned %d rows.\n", pg_numrows($sql_body));
 }
-$row_body = mysqli_fetch_assoc($sql_body);
+if (!$sql_body){
+echo "error:" . pg_last_error();
+}
+$row_body = pg_fetch_row($sql_body);
 
 echo "<table bgcolor='#ECF6CE' width=840 cellpadding=0 cellspacing=0 border=0 align=center>";
 echo "<tr><td><font size=6><a href='index.php'><img src='images/header.gif' alt='Legislative Analyst'></a></font></td></tr>";

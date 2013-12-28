@@ -27,8 +27,7 @@ nd.
 <?php
 
 /* check connection */
-if (mysqli_connect_errno()) {
-    printf("Connect failed: %s\n", mysqli_connect_error());
+if (pg_last_error()) {
     exit();
 }
 
@@ -41,9 +40,9 @@ $body_name=$row_body["name"];
 $str_voters = "SELECT voters.id voter_id,first_name,last_name  from tbl_voters voters order by last_name,first_name; ";
 
 //echo $str_voters . "<br>";
-$sql_voters = mysqli_query($link, $str_voters);
+$sql_voters = pg_query($link, $str_voters);
 
-$voters_count = mysqli_num_rows($sql_voters);
+$voters_count = pg_numrows($sql_voters);
 
 //echo "<br>voters_count: ".$voters_count . "<br>";
 
@@ -61,11 +60,11 @@ $str_votes .= " order by legislation_date,legislation_id, last_name,first_name";
 $str_votes .= ";";
 
 //echo $str_votes;
-$sql_votes = mysqli_query($link, $str_votes);
+$sql_votes = pg_query($link, $str_votes);
 //echo "<br>";
 //echo "new table:<br>";
 echo "\n<table bgcolor='#F5DA81' border=\"1\"><tr><th>Bill Name</th><th>Bill Date</th><th>Issue</th>";
-while ($row_voters = mysqli_fetch_assoc($sql_voters)) {
+while ($row_voters = pg_fetch_assoc($sql_voters)) {
   echo "<th><a href=\"voter_detail.php?id=".$row_voters["voter_id"]."\">".$row_voters["first_name"]." ".$row_voters["last_name"]."</a></th>";
 }
 
@@ -74,7 +73,7 @@ $first_row=TRUE;
 
 
 
-while($row_votes = mysqli_fetch_assoc($sql_votes)) {
+while($row_votes = pg_fetch_assoc($sql_votes)) {
 
   if ($row_votes["legislation_id"] != $current_legislation_id) {
     // start new row
@@ -115,16 +114,16 @@ echo "</tr></table>";
 
 
 
-$votes_count = mysqli_num_rows($sql_votes);
-//$row_votes = mysqli_fetch_assoc($sql_votes);	
+$votes_count = pg_numrows($sql_votes);
+//$row_votes = pg_fetch_assoc($sql_votes);	
 //echo "<br>votes_count: ".$votes_count;
 
 //echo "<br>before while:";
 
-//if ($sql_votes = mysqli_query($link, $str_votes )) 	{}
+//if ($sql_votes = pg_query($link, $str_votes )) 	{}
 echo "<table  width=380 cdllpadding=0 cellspacing=0 border =0>";
 echo "<th bgcolor=lightblue>&nbsp;</th>";
-while($row_legislation = mysqli_fetch_assoc($sql_legislation)){
+while($row_legislation = pg_fetch_assoc($sql_legislation)){
 	echo "<th bgcolor=lightblue>".$row_legislation["legislation_name"]."<br>".$row_legislation["legislation_date"]."</th>";
 }
 echo "</tr>";
@@ -132,7 +131,7 @@ echo "</tr>";
 
 // print list of voters and their votes
 $kounter=1;
-while($row_votes = mysqli_fetch_assoc($sql_votes)){
+while($row_votes = pg_fetch_assoc($sql_votes)){
 //echo "<br>legislation_name: ".$row_votes["legislation_name"];
 
 //echo "<tr><td>id: ".$row_votes["vote_type_id"]."</td></tr>";
@@ -169,9 +168,9 @@ while($row_votes = mysqli_fetch_assoc($sql_votes)){
 echo "<tr><td colspan=3><hr></td></tr>";
 
     /* free result set */
-mysqli_free_result($sql_votes);
-mysqli_free_result($sql_legislation);
-mysqli_close(); // do this for tidyness
+
+
+pg_close(); // do this for tidyness
 ?>
 </body>
 </html>

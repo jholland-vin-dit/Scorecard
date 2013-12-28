@@ -31,8 +31,8 @@ $body_year = $_SESSION["body_year"];
 // get and print issue
 $str_issue = "select * from tbl_issues issues ";
 $str_issue .= "where id=".$issue_id." ;" ;
-$sql_issue = mysqli_query($link, $str_issue);
-$row_issue = mysqli_fetch_assoc($sql_issue);	
+$sql_issue = pg_query($link, $str_issue);
+$row_issue = pg_fetch_assoc($sql_issue);	
 // echo $str_issue;
 
 echo "<table class=bottomtable>"; 
@@ -47,16 +47,16 @@ $str_legislation = "select * from tbl_legislation legislation ";
 $str_legislation .= "where issue_id=".$issue_id;
 $str_legislation .= " and year = ".$body_year." ";
 $str_legislation .= " order by legislation_date;" ;
-$sql_legislation = mysqli_query($link, $str_legislation);
+$sql_legislation = pg_query($link, $str_legislation);
 
 // print initial list of legislation
-//$row_legislation = mysqli_fetch_assoc($sql_legislation1);
+//$row_legislation = pg_fetch_assoc($sql_legislation1);
 //echo $str_legislation;
 
 echo "<table class=\"bottomtable\">";
 echo "<tr><td bgcolor=lightblue  align=right colspan=4><a href='edit_legislation.php?add=T'>Add Legislation</a></td></tr>";
 //echo "<th bgcolor=lightblue>Bill</th><th bgcolor=pink>Date</th><th bgcolor=green>Description</th>";
-while($row_legislation = mysqli_fetch_assoc($sql_legislation)){
+while($row_legislation = pg_fetch_assoc($sql_legislation)){
 //"edit_legislation.php?id=".$row_legislation["id"];
 echo "<tr><td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legislation_id=".$row_legislation["id"]."\">".$row_legislation["legislation_name"]."</a></td>";
 echo "<td valign=top  bgcolor=pink width=25%>".$row_legislation["legislation_date"]."</td>";
@@ -65,13 +65,13 @@ echo "<td valign=top  bgcolor=lightgreen><a href='edit_legislation.php?legislati
 echo "</tr>";
 }
 echo "</table>";
-mysqli_free_result($sql_legislation);
+
 
 // Get and print legislation again in table
 $str_legislation = "select * from tbl_legislation legislation ";
 $str_legislation .= "where issue_id=".$issue_id." order by legislation_date;" ;
-$sql_legislation = mysqli_query($link, $str_legislation);
-$legislation_count = mysqli_num_rows($sql_legislation);
+$sql_legislation = pg_query($link, $str_legislation);
+$legislation_count = pg_numrows($sql_legislation);
 
 //echo $str_legislation."<br>";
 //echo "lgislation_count:".$legislation_count;
@@ -90,20 +90,16 @@ $str_votes .= ";";
 
 //echo $str_votes;
 
-$sql_votes = mysqli_query($link, $str_votes);
+$sql_votes = pg_query($link, $str_votes);
 
-$votes_count = mysqli_num_rows($sql_votes);
-//$row_votes = mysqli_fetch_assoc($sql_votes);	
-//echo "<br>votes_count: ".$votes_count;
+$votes_count = pg_numrows($sql_votes);
 
-//echo "<br>before while:";
-
-//if ($sql_votes = mysqli_query($link, $str_votes )) 	{}
+//if ($sql_votes = pg_query($link, $str_votes )) 	{}
 
 /*
 echo "<table bgcolor='#F5DA81' width=380 cdllpadding=0 cellspacing=0 border =0>";
 echo "<th bgcolor=lightblue>&nbsp;</th>";
-while($row_legislation = mysqli_fetch_assoc($sql_legislation)){
+while($row_legislation = pg_fetch_assoc($sql_legislation)){
 	echo "<th bgcolor=lightblue>".$row_legislation["legislation_name"]."<br>".$row_legislation["legislation_date"]."</th>";
 }
 echo "</tr>";
@@ -124,7 +120,7 @@ $heading_clause = "for this issue";
 
 
 $kounter=1;
-while($row_votes = mysqli_fetch_assoc($sql_votes)){
+while($row_votes = pg_fetch_assoc($sql_votes)){
 //echo "<br>legislation_name: ".$row_votes["legislation_name"];
 
 //echo "<tr><td>id: ".$row_votes["vote_type_id"]."</td></tr>";
@@ -160,14 +156,14 @@ while($row_votes = mysqli_fetch_assoc($sql_votes)){
 }  // while votes
 echo "<tr><td colspan=3><hr></td></tr>";
   
-mysqli_free_result($sql_votes);
-mysqli_free_result($sql_legislation);
-mysqli_close() // do this for tidyness
+
+
+pg_close() // do this for tidyness
 
 
 
-//if ($sql_names = mysqli_query($link, "select * from voters")) {
-   // printf("Select returned %d rows.\n", mysqli_num_rows($sql_names));
+//if ($sql_names = pg_query($link, "select * from voters")) {
+   // printf("Select returned %d rows.\n", pg_numrows($sql_names));
 //}
 
 // this creates a form to enter info into. It calls an update page which then returns to this page

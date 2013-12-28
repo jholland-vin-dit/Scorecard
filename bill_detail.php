@@ -31,17 +31,17 @@ $legislation_id=$_GET["legislation_id"];
 $_SESSION["legislation_id"]=$legislation_id;
 $str_bill = "SELECT l.issue_id,i.title issue_title,l.issue_id,l.legislation_name legislation_name, " .
 " l.description description, l.legislation_date legislation_date , b.name,y.year " .
-"FROM `tbl_legislation` l, tbl_bodies b, tbl_years y,tbl_issues i " .
+"FROM tbl_legislation l, tbl_bodies b, tbl_years y,tbl_issues i " .
 " WHERE l.year = y.year " .
 " AND l.body_id = b.id " .
 " AND i.id=l.issue_id " .
 " and l.id = " . $legislation_id;
 
-//echo $str_bill;
+echo $str_bill;
 
-$sql_bill = mysqli_query($link, $str_bill);
-$bill_count = mysqli_num_rows($sql_bill);
-$row_body = mysqli_fetch_assoc($sql_bill);
+$sql_bill = pg_query($link, $str_bill);
+$bill_count = pg_numrows($sql_bill);
+$row_body = pg_fetch_assoc($sql_bill);
 
 ?>
 <table class="bottomtable">
@@ -92,9 +92,9 @@ $str_votes .= ";";
 
 //echo $str_votes;
 
-$sql_votes = mysqli_query($link, $str_votes);
-$votes_count = mysqli_num_rows($sql_votes);
-//$row_votes = mysqli_fetch_assoc($sql_votes);	
+$sql_votes = pg_query($link, $str_votes);
+$votes_count = pg_numrows($sql_votes);
+//$row_votes = pg_fetch_assoc($sql_votes);	
 
 // echo "<br>votes_count: ".$votes_count . "<br>";
 
@@ -103,7 +103,7 @@ echo "<table class=bottomtable>";
 echo "<tr><th bgcolor=\"lightblue\">Council Member</th><th bgcolor=\"lightblue\">Vote</th></tr>\n";
 // print list of voters and their votes
 
-while($row_votes = mysqli_fetch_assoc($sql_votes)){
+while($row_votes = pg_fetch_assoc($sql_votes)){
 
    $voter_link = "<a href=\"voter_detail.php?voter_id=".$row_votes["voter_id"]."\">".$row_votes["first_name"]." ".$row_votes["last_name"]."</a>";
 	if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
@@ -123,9 +123,9 @@ while($row_votes = mysqli_fetch_assoc($sql_votes)){
 }  // while votes
 echo "<tr><td colspan=3><hr></td></tr>";
     /* free result set */
-mysqli_free_result($sql_votes);
-mysqli_free_result($sql_legislation);
-mysqli_close() // do this for tidyness
+
+
+pg_close() // do this for tidyness
 // now to leave PHP and go back to straight HTML
 ?>
 </table>

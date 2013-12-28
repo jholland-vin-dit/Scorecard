@@ -37,11 +37,11 @@ $issue_id = $_GET["issue_id"];
 
 
 $str_ratings = "select voter_id,last_name,first_name,party_name, district, ";
-$str_ratings .= "if(all_votes=0,0,floor(.5+100*(good_votes/all_votes))) percentage ";
+$str_ratings .= "iif_sql(all_votes=0,.0,floor(.5+100*(good_votes/all_votes))) percentage ";
 $str_ratings .= "from ";
 $str_ratings .= "(";
 $str_ratings .= "select voters.id voter_id, voters.first_name,voters.last_name, ";
-$str_ratings .= "sum(IF(votes.vote_type_id = mtx.desired_vote_type_id,1,0)) good_votes, ";
+$str_ratings .= "sum(iif_sql(votes.vote_type_id = mtx.desired_vote_type_id,1,0)) good_votes, ";
 $str_ratings .= "count(votes.vote_type_id) all_votes, tbl_parties.name party_name, voters.district district ";
 $str_ratings .= "from tbl_voters voters  ";
 $str_ratings .= "left outer join tbl_parties on voters.party_id = tbl_parties.id    ";
@@ -54,7 +54,7 @@ $str_ratings .= "where voters_bodies.year=" . $body_year ;
 if ($issue_id <> 0) {
 $str_ratings .= " and legislation.issue_id = " . $issue_id ;
 }
-$str_ratings .= " group by last_name,first_name,party_name, district  ";
+$str_ratings .= " group by voters.id,last_name,first_name,party_name, district  ";
 $str_ratings .= ")  ";
 $str_ratings .= "subquery order by percentage desc, last_name,first_name ; ";
 
@@ -62,9 +62,9 @@ $str_ratings .= "subquery order by percentage desc, last_name,first_name ; ";
 //echo $str_ratings;
 
 
-$sql_ratings = mysqli_query($link, $str_ratings);
+$sql_ratings = pg_query($link, $str_ratings);
 
-$ratings_count = mysqli_num_rows($sql_ratings);
+$ratings_count = pg_num_rows($sql_ratings);
 echo "<table class=\"bottomtablenowidth\"><tr><td>";
 echo "<font size=4>Legislators and their ratings ";
 echo $_GET["heading_clause"]; 
@@ -73,7 +73,7 @@ echo "</font></td><tr></table>";
 // print list of voters and their votes
 // taking it out of a table so it can be used in other page better
 echo "<table  class=\"bottomtablenowidth\">";
-while($row_ratings = mysqli_fetch_assoc($sql_ratings)){
+while($row_ratings = pg_fetch_assoc($sql_ratings)){
   echo "<tr><td><a href=\"voter_detail.php?voter_id=".$row_ratings["voter_id"]."\">" . $row_ratings["first_name"] . " " . $row_ratings["last_name"] .  ", " . $row_ratings["district"] . ", " .  $row_ratings["party_name"] .
  "</a></td><td>"
     . $row_ratings["percentage"] . "% </td><td>" ;

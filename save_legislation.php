@@ -41,9 +41,9 @@ if($legislation_id=='add'){
 	$adding=false;
 }
 
-$legislation_name=mysqli_real_escape_string($link, $_POST["legislation_name"]);
-$legislation_date=mysqli_real_escape_string($link, $_POST["legislation_date"]);
-$description=mysqli_real_escape_string($link, $_POST["description"]);
+$legislation_name=pg_escape_string($link, $_POST["legislation_name"]);
+$legislation_date=pg_escape_string($link, $_POST["legislation_date"]);
+$description=pg_escape_string($link, $_POST["description"]);
 $desired_vote_type_id=$_POST["desired_vote_type"];
 
 
@@ -94,47 +94,54 @@ if(!$adding){
 
 
 // add or edit legislation
-$sql_legislation = mysqli_query($link, $str_legislation);
+$sql_legislation = pg_query($link, $str_legislation);
 
 }else{
 	$str_legislation  = "insert into tbl_legislation ";
 	$str_legislation .= "(legislation_name, legislation_date, description, issue_id, body_id, year) ";
-	$str_legislation .= "VALUES ('$legislation_name', '$legislation_date', '$description', $issue_id, $body_id, $body_year)";
+	$str_legislation .= "VALUES ('$legislation_name', '$legislation_date', '$description', $issue_id, $body_id, $body_year);";
 
-	// add or edit legislation
-	$sql_legislation = mysqli_query($link, $str_legislation);
-	$new_id=mysqli_insert_id($link);
-
+	$legislation_resource= pg_query($link, $str_legislation);
 	// get recent insert id
-	$legislation_id=mysqli_insert_id($link);
+	$str_id = "select  currval('tbl_legislation_id_seq') limit 1;";
+	
+     	$res_id = pg_query($link,$str_id);
+	$row_id = pg_fetch_assoc($res_id);
+	$legislation_id=$row_id["currval"];
+	echo "<br>" . $str_legislation . "<br>";
+	// add or edit legislation
+	echo "<br>ID:" . $legislation_id . "<br>";
 
 	$str_desired_vote_type  = "insert into mtx_legis_party_desired_vote_types ";
 	$str_desired_vote_type .= "(legislation_id, party_id, desired_vote_type_id) ";
 	$str_desired_vote_type .= "VALUES ('$legislation_id', '$party_id', '$desired_vote_type_id')";
 
 }
-
+echo "<br>" . $str_desired_vote_type . "<br>";
 // add or edit desired_vote_type
-$sql_desired_vote_type = mysqli_query($link, $str_desired_vote_type);
+$sql_desired_vote_type = pg_query($link, $str_desired_vote_type);
 
-// echo $str_desired_vote_type. "<br>";
+ echo $str_desired_vote_type. "<br>";
 // echo $str_legislation;
 
 
 $kounter=0;
 if ($adding){
-	$str1="insert into tbl_votes(legislation_id, voter_id, vote_type_id) VALUES";
+	$str1="insert into tbl_votes(legislation_id, voter_id, vote_type_id,vote_date) VALUES";
 	$str2= " ";
 	foreach ( $_POST as $key => $value ){
 		$kounter ++;
   		if ($kounter >6){
-//	 		 echo "$key : $value <br>";
-			$str2.="(".$new_id.", ".$key.", ".$value."), ";
+	 		 echo "$key : $value <br>";
+			$str2.="(".$legislation_id.", ".$key.", ".$value.", ";
+			$str2 .= "'" . $legislation_date . "'),";
 		}
 	}
 	$str_tbl_votes=$str1.substr($str2,0,-2);
-//	echo $str_tbl_votes;
-	$sql_tbl_votes=mysqli_query($link, $str_tbl_votes);
+	$str_tbl_votes .= ");";
+	echo $str_tbl_votes;
+	$sql_tbl_votes=pg_query($link, $str_tbl_votes);
+	echo "executed query";
 }else{
 	foreach ( $_POST as $key => $value ){
 		$kounter ++;
@@ -142,8 +149,8 @@ if ($adding){
 		if ($kounter >5){
 // 	 		 echo "<br>$key : $value ";
 			$str_tbl_votes.="update tbl_votes set vote_type_id='".$value."' where voter_id='".$key."' and legislation_id='".$legislation_id."'";
-//echo $str_tbl_votes;			
-			if ($sql_tbl_votes=mysqli_query($link, $str_tbl_votes)){
+echo $str_tbl_votes;			
+			if ($sql_tbl_votes=pg_query($link, $str_tbl_votes)){
 //			echo " : yes";
 //			}else{
 //			echo "no";
@@ -155,10 +162,10 @@ if ($adding){
 //echo "<br>".$str_tbl_votes;
 
 // xxx
- if (!$errors) { header('Location: index.php?id='.$legislation_id.'');
-} else {
-header('Location: errors.php?errormsgs='.urlencode($errormsgs));
+// if (!$errors) { header('Location: index.php?id='.$legislation_id.'');
+//} else {
+//header('Location: errors.php?errormsgs='.urlencode($errormsgs));
 
-}
+//}
 
 ?>

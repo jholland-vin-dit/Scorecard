@@ -39,10 +39,10 @@ session_start()
 
 //    echo $str_voter;
 
-    $sql_voter = mysqli_query($link, $str_voter);
-    $voter_count = mysqli_num_rows($sql_voter);
+    $sql_voter = pg_query($link, $str_voter);
+    $voter_count = pg_numrows($sql_voter);
 
-    $row_voter = mysqli_fetch_assoc($sql_voter);
+    $row_voter = pg_fetch_assoc($sql_voter);
 	echo "<table class=bottomtable>";
     echo "<tr><td>";
 	echo "<h3>".$row_voter["first_name"]." ".$row_voter["last_name"]."</h3>";
@@ -63,9 +63,9 @@ $str_good_number .= " and mtx.desired_vote_type_id =votes.vote_type_id ";
 $str_good_number .= " and mtx.party_id=3)";
 $str_good_number .= " AND votes.voter_id=".$voter_id.";";
 
-    $sql_good_number  = mysqli_query($link, $str_good_number);
-    $good_number_count = mysqli_num_rows($sql_good_number);
-    $row_good_number = mysqli_fetch_assoc($sql_good_number);
+    $sql_good_number  = pg_query($link, $str_good_number);
+    $good_number_count = pg_numrows($sql_good_number);
+    $row_good_number = pg_fetch_assoc($sql_good_number);
 //echo "<h1>".$row_good_number["thecount"]."<h1>\n";
     // get and print rating number - all votes 
 $str_all_number = "SELECT count(*) thecount ";
@@ -77,9 +77,9 @@ $str_all_number .= " where mtx.legislation_id = legislation.id";
 $str_all_number .= " and mtx.party_id=3)";
 $str_all_number .= " AND votes.voter_id=".$voter_id.";";
 
-    $sql_all_number  = mysqli_query($link, $str_all_number);
-    $all_number_count = mysqli_num_rows($sql_all_number);
-    $row_all_number = mysqli_fetch_assoc($sql_all_number);
+    $sql_all_number  = pg_query($link, $str_all_number);
+    $all_number_count = pg_numrows($sql_all_number);
+    $row_all_number = pg_fetch_assoc($sql_all_number);
 //echo "<h1>".$row_good_number["thecount"]."<h1>\n";
 //echo "<h1>-----</h1>\n";
 //echo "<h1>".$row_all_number["thecount"]."</h1>\n";
@@ -162,14 +162,14 @@ $str_bill = "SELECT votes.vote_type_id, mtx.desired_vote_type_id, vote_types.vot
 
 //    echo $str_bill;
 
-    $sql_bill = mysqli_query($link, $str_bill);
-    $bill_count = mysqli_num_rows($sql_bill);
+    $sql_bill = pg_query($link, $str_bill);
+    $bill_count = pg_numrows($sql_bill);
   //  echo "bill_count:" . $bill_count;
     
 
 
     echo "<table class=bottomtable>\n";
-    while($row_votes = mysqli_fetch_assoc($sql_bill)){
+    while($row_votes = pg_fetch_assoc($sql_bill)){
    	if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
            $span = " style=\"background-color:green;\"";
 	} else {
@@ -189,9 +189,9 @@ $str_bill = "SELECT votes.vote_type_id, mtx.desired_vote_type_id, vote_types.vot
     }  // while votes
     echo "</table>\n";
     /* free result set */
-    mysqli_free_result($sql_voter);
-    mysqli_free_result($sql_bill);
-    mysqli_close(); // do this for tidyness
+    
+    
+    pg_close(); // do this for tidyness
 
 
     // now to leave PHP and go back to straight HTML
