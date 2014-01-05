@@ -22,6 +22,7 @@ nd.
 session_start();
 ?>
 <?php include 'connection_string.php'; ?>
+<?php include 'common.php'; ?>
 <?php include 'header.php'; ?>
 
 <?php
@@ -29,12 +30,17 @@ $body_year=$_SESSION["body_year"];
 
 $legislation_id=$_GET["legislation_id"];
 $_SESSION["legislation_id"]=$legislation_id;
-$str_bill = "SELECT l.issue_id,i.title issue_title,l.issue_id,l.legislation_name legislation_name, " .
-" l.description description, l.legislation_date legislation_date , b.name,y.year " .
-"FROM `tbl_legislation` l, tbl_bodies b, tbl_years y,tbl_issues i " .
+$str_bill = "SELECT l.bill_number bill_number,i.title issue_title,l.issue_id,l.legislation_name legislation_name,l.synopsis synopsis, " .
+" l.description description, l.legislation_date legislation_date , b.name,y.year,vote_types.vote " .
+
+" FROM `tbl_legislation` l, tbl_bodies b, tbl_years y,tbl_issues i, " .
+ " mtx_legis_party_desired_vote_types mtx, " .
+ " tbl_vote_types vote_types " .
 " WHERE l.year = y.year " .
 " AND l.body_id = b.id " .
 " AND i.id=l.issue_id " .
+" AND  mtx.legislation_id=l.id  " .
+" AND  vote_types.id=mtx.desired_vote_type_id  " .
 " and l.id = " . $legislation_id;
 
 //echo $str_bill;
@@ -45,16 +51,23 @@ $row_body = mysqli_fetch_assoc($sql_bill);
 
 ?>
 <table class="bottomtable">
-<tr><td><h3>Issue: 
-<?php echo $row_body["issue_title"] ?>
+<tr><td><span style="font-weight:bold;"><a href="legislation_listing.php?issue_id=<?php echo $row_body["issue_id"] ?>">Issue: 
+<?php echo $row_body["issue_title"] ?></a></span>
 </td></tr></table>
 <table class=bottomtable>
-<tr><td>
-<span style="text-align:center"><h3> Bill:
+<tr><td><span style="font-weight:bold;">
+ Bill:
 <?php 
 echo $row_body["legislation_name"];
 ?>
-</h3></span>
+</span>
+</td></tr>
+<tr><td><span style="font-weight:bold;">
+ Bill #:
+<?php 
+echo $row_body["bill_number"];
+?>
+</span>
 </td></tr></table>
 <?php
 
@@ -62,17 +75,26 @@ echo $row_body["legislation_name"];
 echo "<table class=bottomtable>";
 echo "<tr>
 <th bgcolor=\"orange\">Description</th>
-<th bgcolor=\"orange\">Date</th>
-<th bgcolor=\"orange\">Body</th></tr>\n";
+<th bgcolor=\"orange\" style=\"width:100px;\">Date</th>
+<th bgcolor=\"orange\">Desired Vote</th></tr>\n";
 
 echo "<tr><td>"
 .$row_body["description"]
 ."</td><td>"
 .$row_body["legislation_date"]
 ."</td><td>"
-."<a href=\"index.php\">"
-.$row_body["name"];
+.$row_body["vote"];
 echo "</td></tr>";
+echo "</table><table class=bottomtable>";
+echo "<tr>";
+echo " <th bgcolor=\"orange\">Synopsis</th>";
+echo "</tr>\n";
+echo "<tr><td>"
+.$row_body["synopsis"]
+."</td></tr>";
+
+
+
 echo "</table>";
 
 $str_votes= "SELECT mtx.party_id,issue_id, legislation_name,votes.legislation_id,voter_id,vote,first_name,last_name, ";
@@ -96,9 +118,6 @@ $sql_votes = mysqli_query($link, $str_votes);
 $votes_count = mysqli_num_rows($sql_votes);
 //$row_votes = mysqli_fetch_assoc($sql_votes);	
 
-// echo "<br>votes_count: ".$votes_count . "<br>";
-
-//echo "<table  bgcolor='#F5DA81' width=380 cdllpadding=0 cellspacing=0 border =0>";
 echo "<table class=bottomtable>";
 echo "<tr><th bgcolor=\"lightblue\">Council Member</th><th bgcolor=\"lightblue\">Vote</th></tr>\n";
 // print list of voters and their votes
@@ -107,15 +126,15 @@ while($row_votes = mysqli_fetch_assoc($sql_votes)){
 
    $voter_link = "<a href=\"voter_detail.php?voter_id=".$row_votes["voter_id"]."\">".$row_votes["first_name"]." ".$row_votes["last_name"]."</a>";
 	if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
-           $spancolor ="bgcolor=\"lightgreen\"";
+           $spancolor ="background-color:" . $bgcolor1 . ";";
 	} else {
-           $spancolor="";
+           $spancolor ="background-color:" . $bgcolor2 . ";";
 	}
 
-   $vote_text = "<td ".$spancolor." >".$row_votes["vote"]."</td>";
+   $vote_text = "<td style=\"".$spancolor."\" >".$row_votes["vote"]."</td>";
 
 			echo "<tr>";
-                        echo "<td " .$spancolor. " >".$voter_link."</td>";
+                        echo "<td style=\"" .$spancolor. "\" >".$voter_link."</td>";
 
 			echo $vote_text;
 			echo "</tr>\n";

@@ -21,6 +21,7 @@
 <?php
 // session_start();
 include 'connection_string.php';
+include 'common.php';
 //  if ($_GET["body_year"] == null) {
       $body_year = "2013";   // temprorary
 //} else {
@@ -50,6 +51,7 @@ $str_ratings .= "left outer join tbl_legislation legislation on votes.legislatio
 $str_ratings .= "left outer join mtx_legis_party_desired_vote_types mtx on legislation.id = mtx.legislation_id  ";
 $str_ratings .= "left join mtx_voters_bodies voters_bodies on voters_bodies.voter_id=voters.id  ";
 $str_ratings .= "where voters_bodies.year=" . $body_year ;
+$str_ratings .= " and votes.vote_type_id <> -1" ; // N/A's don't count
 
 if ($issue_id <> 0) {
 $str_ratings .= " and legislation.issue_id = " . $issue_id ;
@@ -83,10 +85,10 @@ while($row_ratings = mysqli_fetch_assoc($sql_ratings)){
   echo "<tr style=\"height:20px;\">\n";
 
   for ($n=0;$n<$num_of_green_cells;$n++)
-    {echo "<td width=\"1px\" style=\"padding:0;margin:0;background-color:#399C2C;\"> </td>";
+    {echo "<td width=\"1px\" style=\"padding:0;margin:0;background-color:" . $bgcolor1 . ";\"> </td>";
     }
   for ($n=0;$n<$TOTAL_CELLS-$num_of_green_cells;$n++){
-    echo "<td width=\"1px\" style=\"padding:0;margin:0;background-color:#535E51;\"> </td>";
+    echo "<td width=\"1px\" style=\"padding:0;margin:0;background-color:" . $bgcolor2 . ";\"> </td>";
   }
   echo "</tr></table></td>\n";
   echo "</tr>\n";

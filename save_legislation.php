@@ -43,6 +43,8 @@ if($legislation_id=='add'){
 
 $legislation_name=mysqli_real_escape_string($link, $_POST["legislation_name"]);
 $legislation_date=mysqli_real_escape_string($link, $_POST["legislation_date"]);
+$bill_number=mysqli_real_escape_string($link, $_POST["bill_number"]);
+$synopsis=mysqli_real_escape_string($link, $_POST["synopsis"]);
 $description=mysqli_real_escape_string($link, $_POST["description"]);
 $desired_vote_type_id=$_POST["desired_vote_type"];
 
@@ -80,12 +82,12 @@ echo $legislation_date;
 //echo $subtitle."<br>";
 //echo $description."<br>";
 //echo $pro_environment_vote."<br>";
-//echo $synopsis;
+//echo "SYNOPSIS:" . $synopsis;
 
 
 if(!$adding){
 	$str_legislation  = "update tbl_legislation ";
-	$str_legislation .= "set legislation_name='$legislation_name', legislation_date='$legislation_date', description='$description' ";
+	$str_legislation .= "set legislation_name='$legislation_name', legislation_date='$legislation_date', description='$description',bill_number='$bill_number',synopsis='$synopsis' ";
 	$str_legislation .= "where id=".$legislation_id.";" ;
 
 	$str_desired_vote_type  = "update mtx_legis_party_desired_vote_types ";
@@ -98,8 +100,8 @@ $sql_legislation = mysqli_query($link, $str_legislation);
 
 }else{
 	$str_legislation  = "insert into tbl_legislation ";
-	$str_legislation .= "(legislation_name, legislation_date, description, issue_id, body_id, year) ";
-	$str_legislation .= "VALUES ('$legislation_name', '$legislation_date', '$description', $issue_id, $body_id, $body_year)";
+	$str_legislation .= "(legislation_name, legislation_date, description, issue_id, body_id, year,synopsis,bill_number) ";
+	$str_legislation .= "VALUES ('$legislation_name', '$legislation_date', '$description', $issue_id, $body_id, $body_year, '$synopsis','$bill_number')";
 
 	// add or edit legislation
 	$sql_legislation = mysqli_query($link, $str_legislation);
@@ -155,7 +157,7 @@ if ($adding){
 //echo "<br>".$str_tbl_votes;
 
 // xxx
- if (!$errors) { header('Location: index.php?id='.$legislation_id.'');
+ if (!$errors) { header('Location: bill_detail.php?legislation_id='.$legislation_id.'');
 } else {
 header('Location: errors.php?errormsgs='.urlencode($errormsgs));
 

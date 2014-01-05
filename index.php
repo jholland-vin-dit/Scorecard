@@ -36,7 +36,7 @@ $_SESSION["body_year"]=$body_year;
 ?>
 <?php
 $page_name="index.php";
-$page_title = "Legislative analyst home page";
+$page_title = "Voter Scorecard";
 
 $legislation_issues_to_view = ' is not null ';
 $heading_clause = ' for all issues ';
@@ -52,29 +52,9 @@ selectObj.form.submit();
 </script>
 <?php  include 'header.php'; ?>
 
-<?php
-// specific to home page
 
-//echo "<table class=bottomtable>";
-//echo "<tr><td  align=right>";
-//echo "<form action=\"". $page_name ;
-//e//cho "\" method=\"GET\">\n";
-//echo "<select name=\"body_year\" onchange=\"myfunc(this);\">";
-//echo "<option value=\"\">Select a year</option>\n";
-//echo "<option value=\"1994\"";
-//if ($body_year == 1994) { echo " selected  ";}
-//echo ">1994</option>\n";
-//echo "<option value=\"2013\" ";
-//if ($body_year == 2013) { echo " selected ";}
-//echo ">2013</option>\n";
-//echo "</select></form>\n";
-//echo "</td>";
-//echo "</tr>";
-//echo "</table>";
-?>
 <table class="bottomtable"><tr><td width="65%">
 <?php  include 'http://192.168.61.98/Scorecard/voters_ratings.php' . '?issue_id=0&heading_clause=' . urlencode($heading_clause)   ; ?>
-    <font size=3>Issues</font>
 </td>
 <td width="35%"> 
     <?php 
@@ -90,12 +70,10 @@ selectObj.form.submit();
 " inner join tbl_big_issues big_issues on issues.big_issue_id=big_issues.id " .
 " order by issues.title desc ;";
       echo "<table class=\"bottomtablenowidth\">\n";
-		$color1="#EAECC9";
-		$color2="CBECC9";
+      echo "<tr><td><font size=\"4\">All Issues</font></td></tr>\n";
 		$current_color=$color1;
 		$color_toggle=true;
 
-echo "<tr><td><h1>Issues:</h1></td></tr> ";
       if ($sql_issues = mysqli_query($link, $sql_issues)) {
       	while($row_issues = mysqli_fetch_assoc($sql_issues))
 

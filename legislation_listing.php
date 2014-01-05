@@ -35,8 +35,13 @@ $sql_issue = mysqli_query($link, $str_issue);
 $row_issue = mysqli_fetch_assoc($sql_issue);	
 // echo $str_issue;
 
-echo "<table class=bottomtable>"; 
-echo "<tr><td colspan=3><h3>Issue: ".$row_issue["title"]."</td><td><a href=\"edit_issue.php?id=".$row_issue["id"]."\">edit</a></h3>\n</td></tr>";
+echo "<table class=bottomtable>";
+echo "<tr><td colspan=3><span style=\"font-weight:bold;\">Issue: ".$row_issue["title"]."</td>";
+
+if ($_SESSION["user"]) { 
+echo "<td><a href=\"edit_issue.php?id=".$row_issue["id"]."\">edit</a></h3>\n</td>";
+}
+echo "</tr>";
 echo "<tr>";
 echo "<td valign=top>".$row_issue["description"]."</td>";
 echo "</tr>";
@@ -54,15 +59,23 @@ $sql_legislation = mysqli_query($link, $str_legislation);
 //echo $str_legislation;
 
 echo "<table class=\"bottomtable\">";
-echo "<tr><td bgcolor=lightblue  align=right colspan=4><a href='edit_legislation.php?add=T'>Add Legislation</a></td></tr>";
+if ($_SESSION["user"]) { 
+echo "<tr bgcolor=lightblue ><td>Legislation</td><td style=\"width:30px;\">Bill #</td><td style=\"width:50px;\">Date<td>Description</td><td align=right colspan=4><a href='edit_legislation.php?add=T'>Add Legislation</a></td></tr>";
+}
 //echo "<th bgcolor=lightblue>Bill</th><th bgcolor=pink>Date</th><th bgcolor=green>Description</th>";
 while($row_legislation = mysqli_fetch_assoc($sql_legislation)){
 //"edit_legislation.php?id=".$row_legislation["id"];
 echo "<tr><td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legislation_id=".$row_legislation["id"]."\">".$row_legislation["legislation_name"]."</a></td>";
-echo "<td valign=top  bgcolor=pink width=25%>".$row_legislation["legislation_date"]."</td>";
+echo "<td valign=top>".$row_legislation["bill_number"]."</td><td valign=top  bgcolor=pink >".$row_legislation["legislation_date"]."</td>";
 echo "<td valign=top  bgcolor=lightgreen>".$row_legislation["description"]."</td>";
-echo "<td valign=top  bgcolor=lightgreen><a href='edit_legislation.php?legislation_id=".$row_legislation["id"]."'>edit</a></td>";
+if ($_SESSION["user"]) { 
+echo "<td valign=top  bgcolor=lightgreen><a href='edit_legislation.php?legislation_id=".$row_legislation["id"]."'>edit</a>&nbsp;&nbsp;&nbsp;<a href='delete_legislation.php?legislation_id=".$row_legislation["id"]."'>delete</a></td>";
+
 echo "</tr>";
+echo "</tr><tr><td colspan=4 valign=top bgcolor=papayawhip>".$row_legislation["synopsis"]."</td><td>&nbsp;</td></tr>";
+
+}
+
 }
 echo "</table>";
 mysqli_free_result($sql_legislation);
@@ -116,8 +129,11 @@ echo "</table>\n";
 $legislation_issues_to_view = " = " . $issue_id;
 $heading_clause = "for this issue";
 ?>
+<?php // below would print ratings of voters on this issue
+//  include 'http://192.168.61.98/Scorecard/voters_ratings.php' . '?issue_id=' . $issue_id . '&heading_clause=' . urlencode($heading_clause) ; 
 
-<?php  include 'http://192.168.61.98/Scorecard/voters_ratings.php' . '?issue_id=' . $issue_id . '&heading_clause=' . urlencode($heading_clause) ; ?>
+?>
+
 
 <?php
 /*
