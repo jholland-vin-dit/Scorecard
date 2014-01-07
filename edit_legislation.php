@@ -34,6 +34,7 @@ if (isset($_GET["legislation_id"])){
 	$sql_legis_party_desired_vote_type = mysqli_query($link, $str_legis_party_desired_vote_type);
 	$row_legis_party_desired_vote_type = mysqli_fetch_assoc($sql_legis_party_desired_vote_type);
 	$legis_party_desired_vote_type_id=$row_legis_party_desired_vote_type["desired_vote_type_id"];
+
 //	echo $str_legis_party_desired_vote_type."<br>";
 //	echo "legis_party_desired_vote_type_id: ".$legis_party_desired_vote_type_id;
 	$legis_party_desired_vote_type_on=true;
@@ -64,7 +65,9 @@ $str_vote_types = "select * from tbl_vote_types ";
 $str_vote_types .= " order by displayorder; ";
 $sql_vote_types = mysqli_query($link, $str_vote_types);
 
-
+$str_voting_bodies = "select * from tbl_voting_bodies ";
+$str_voting_bodies .= " order by displayorder; ";
+$sql_voting_bodies = mysqli_query($link, $str_voting_bodies);
 
 // $issue_id=$_GET["issue_id"];
 echo "<table class=bottomtable>";
@@ -89,6 +92,7 @@ if(!$adding){
 	$bill_number=$row_legislation["bill_number"];
 	$description=$row_legislation["description"];
 	$synopsis = $row_legislation["synopsis"];
+	$legis_voting_body = $row_legislation["voting_body"];
 	echo " <input type=hidden name='legislation_id' value=".$legislation_id.">";
 	// echo"<td bgcolor=lightblue align=right><a href='edit_legislation.php?add=T'>Add</a></td>";
 	mysqli_free_result($sql_legislation);
@@ -132,9 +136,28 @@ echo "<tr>";
 echo "<td valign=top  bgcolor=#ACFA58> ";
 echo "Bill #: </td>"; 
 echo "<td valign=top  bgcolor=#ACFA58>";
-echo "<textarea cols='50' rows='10' name='bill_number'>".$bill_number."</textarea></td></tr>";
-
+echo "<input type=\"text\" name='bill_number' length=\"14\" value=\"".$bill_number."\"></td></tr>";
 echo "<tr>";
+
+echo "<td valign=top  bgcolor=#ACFA58> ";
+echo "Voting Body: </td>"; 
+echo "<td valign=top  bgcolor=#ACFA58>";
+echo "<select name=voting_body>";
+while($row_voting_bodies = mysqli_fetch_assoc($sql_voting_bodies)){
+		if($legis_voting_body==$row_voting_bodies["id"]){
+			$selected = " selected ";
+		}else{
+			$selected = " ";
+		}
+
+	echo "\n<option value=".$row_voting_bodies["id"]." ".$selected." >".$row_voting_bodies["name"]."</option>";
+}
+
+echo "</select>";
+
+
+
+echo "</td></tr><tr>";
 
 echo "<td valign=top  bgcolor=#ACFA58> ";
 echo "Description: </td>"; 

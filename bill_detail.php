@@ -31,17 +31,17 @@ $body_year=$_SESSION["body_year"];
 $legislation_id=$_GET["legislation_id"];
 $_SESSION["legislation_id"]=$legislation_id;
 $str_bill = "SELECT l.bill_number bill_number,i.title issue_title,l.issue_id,l.legislation_name legislation_name,l.synopsis synopsis, " .
-" l.description description, l.legislation_date legislation_date , b.name,y.year,vote_types.vote " .
-
+" l.description description, l.legislation_date legislation_date , b.name,y.year,vote_types.vote, vb.name voting_body_name " .
 " FROM `tbl_legislation` l, tbl_bodies b, tbl_years y,tbl_issues i, " .
  " mtx_legis_party_desired_vote_types mtx, " .
- " tbl_vote_types vote_types " .
+ " tbl_vote_types vote_types, tbl_voting_bodies vb " .
 " WHERE l.year = y.year " .
 " AND l.body_id = b.id " .
 " AND i.id=l.issue_id " .
 " AND  mtx.legislation_id=l.id  " .
 " AND  vote_types.id=mtx.desired_vote_type_id  " .
-" and l.id = " . $legislation_id;
+" and l.id = " . $legislation_id  .
+" and l.voting_body = vb.id;";
 
 //echo $str_bill;
 
@@ -68,7 +68,15 @@ echo $row_body["legislation_name"];
 echo $row_body["bill_number"];
 ?>
 </span>
-</td></tr></table>
+</td></tr>
+<tr><td><span style="font-weight:bold;">
+ Voting Body:
+<?php 
+echo $row_body["voting_body_name"];
+?>
+</span>
+</td></tr>
+</table>
 <?php
 
 
@@ -98,14 +106,14 @@ echo "<tr><td>"
 echo "</table>";
 
 $str_votes= "SELECT mtx.party_id,issue_id, legislation_name,votes.legislation_id,voter_id,vote,first_name,last_name, ";
-$str_votes .= "vote_type_id,desired_vote_type_id FROM tbl_legislation legislation ";
+$str_votes .= "vote_type_id,desired_vote_type_id ,tbl_parties.name party_name, voters.district district FROM tbl_legislation legislation ";
 $str_votes .= " INNER JOIN tbl_votes votes ON votes.legislation_id = legislation.id  ";
 
 $str_votes .= " inner join tbl_voters voters on votes.voter_id=voters.id  ";
 $str_votes .= "inner join tbl_vote_types vote_types on votes.vote_type_id=vote_types.id  ";
 
 $str_votes .= "inner join mtx_legis_party_desired_vote_types mtx on mtx.legislation_id=legislation.id  ";
-
+$str_votes .= "left outer join tbl_parties on voters.party_id = tbl_parties.id    ";
 $str_votes .= " WHERE legislation.id=".$legislation_id." ";
 $str_votes .= " and mtx.party_id=3 ";
 $str_votes .= " order by voter_id, legislation_date  ";
@@ -124,11 +132,11 @@ echo "<tr><th bgcolor=\"lightblue\">Council Member</th><th bgcolor=\"lightblue\"
 
 while($row_votes = mysqli_fetch_assoc($sql_votes)){
 
-   $voter_link = "<a href=\"voter_detail.php?voter_id=".$row_votes["voter_id"]."\">".$row_votes["first_name"]." ".$row_votes["last_name"]."</a>";
+   $voter_link = "<a style=\"color:white;\" href=\"voter_detail.php?voter_id=".$row_votes["voter_id"]."\">".$row_votes["first_name"]." ".$row_votes["last_name"].  ", " . $row_votes["district"] . ", " .  $row_votes["party_name"] .    "</a>";
 	if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
-           $spancolor ="background-color:" . $bgcolor1 . ";";
+           $spancolor ="background-color:" . $bgcolor1 . ";color:white;";
 	} else {
-           $spancolor ="background-color:" . $bgcolor2 . ";";
+           $spancolor ="background-color:" . $bgcolor2 . ";color:white;";
 	}
 
    $vote_text = "<td style=\"".$spancolor."\" >".$row_votes["vote"]."</td>";

@@ -23,9 +23,9 @@ session_start();
 ?>
 <!--?php include 'list_sessions.php'; ?-->
 <?php
-//	foreach ( $_POST as $key => $value ){
-//	 		 echo "$key : $value <br>";
-//	}
+	foreach ( $_POST as $key => $value ){
+	 		 echo "$key : $value <br>";
+	}
 include ("connection_string.php");
 $body_id=$_SESSION["body_id"];
 $body_year=$_SESSION["body_year"];
@@ -33,6 +33,7 @@ $party_id=$_SESSION["party_id"];
 
 $legislation_id=$_POST["legislation_id"];
 $desired_vote_type=$_POST["desired_vote_type"];
+$voting_body=$_POST["voting_body"];
 // echo $legislation_id." ss<br>";
 if($legislation_id=='add'){
 	$issue_id=$_POST["issue_id"];
@@ -87,7 +88,7 @@ echo $legislation_date;
 
 if(!$adding){
 	$str_legislation  = "update tbl_legislation ";
-	$str_legislation .= "set legislation_name='$legislation_name', legislation_date='$legislation_date', description='$description',bill_number='$bill_number',synopsis='$synopsis' ";
+	$str_legislation .= "set legislation_name='$legislation_name', legislation_date='$legislation_date', description='$description',bill_number='$bill_number',synopsis='$synopsis',voting_body=$voting_body ";
 	$str_legislation .= "where id=".$legislation_id.";" ;
 
 	$str_desired_vote_type  = "update mtx_legis_party_desired_vote_types ";
@@ -100,8 +101,8 @@ $sql_legislation = mysqli_query($link, $str_legislation);
 
 }else{
 	$str_legislation  = "insert into tbl_legislation ";
-	$str_legislation .= "(legislation_name, legislation_date, description, issue_id, body_id, year,synopsis,bill_number) ";
-	$str_legislation .= "VALUES ('$legislation_name', '$legislation_date', '$description', $issue_id, $body_id, $body_year, '$synopsis','$bill_number')";
+	$str_legislation .= "(legislation_name, legislation_date, description, issue_id, body_id, year,synopsis,bill_number,voting_body) ";
+	$str_legislation .= "VALUES ('$legislation_name', '$legislation_date', '$description', $issue_id, $body_id, $body_year, '$synopsis','$bill_number',$voting_body)";
 
 	// add or edit legislation
 	$sql_legislation = mysqli_query($link, $str_legislation);
@@ -128,14 +129,13 @@ if ($adding){
 	$str1="insert into tbl_votes(legislation_id, voter_id, vote_type_id) VALUES";
 	$str2= " ";
 	foreach ( $_POST as $key => $value ){
-		$kounter ++;
-  		if ($kounter >6){
-//	 		 echo "$key : $value <br>";
+	if (is_numeric($key)){
 			$str2.="(".$new_id.", ".$key.", ".$value."), ";
-		}
+			}
+
 	}
 	$str_tbl_votes=$str1.substr($str2,0,-2);
-//	echo $str_tbl_votes;
+	echo $str_tbl_votes;
 	$sql_tbl_votes=mysqli_query($link, $str_tbl_votes);
 }else{
 	foreach ( $_POST as $key => $value ){
