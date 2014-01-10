@@ -62,8 +62,13 @@ $issue=$row_issue["title"];
 
 // vote types for dropdown
 $str_vote_types = "select * from tbl_vote_types ";
-$str_vote_types .= " order by displayorder; ";
+<<<<<<< HEAD
+$str_vote_types .= " order by vote; ";
 $sql_vote_types = pg_query($link, $str_vote_types);
+=======
+$str_vote_types .= " order by displayorder; ";
+$sql_vote_types = mysqli_query($link, $str_vote_types);
+>>>>>>> master
 
 $str_voting_bodies = "select * from tbl_voting_bodies ";
 $str_voting_bodies .= " order by displayorder; ";
@@ -184,8 +189,13 @@ if($adding){
 	$sql_voters = pg_query($link, $str_voters);
 	while($row_voters = pg_fetch_assoc($sql_voters)){
 		$str_vote_types = "select * from tbl_vote_types ";
-		$str_vote_types .= " order by displayorder; ";
+<<<<<<< HEAD
+		$str_vote_types .= " order by vote; ";
 		$sql_vote_types = pg_query($link, $str_vote_types);
+=======
+		$str_vote_types .= " order by displayorder; ";
+		$sql_vote_types = mysqli_query($link, $str_vote_types);
+>>>>>>> master
 		echo "\n<tr><td>".$row_voters["first_name"]." ".$row_voters["last_name"]."</td>";				
 		while($row_vote_types = pg_fetch_assoc($sql_vote_types)){
 //			if($adding){
@@ -209,10 +219,18 @@ if($adding){
 	$sql_voters = pg_query($link, $str_voters);
 	while($row_voters = pg_fetch_assoc($sql_voters)){
 		$str_vote_types = "select * from tbl_vote_types ";
-		$str_vote_types .= " order by displayorder; ";
+<<<<<<< HEAD
+		$str_vote_types .= " order by vote; ";
 		$sql_vote_types = pg_query($link, $str_vote_types);
 		echo "\n<tr><td>".$row_voters["first_name"]." ".$row_voters["last_name"]."</td>";				
 		while($row_vote_types = pg_fetch_assoc($sql_vote_types)){
+//			if(!$adding){
+				if ($row_vote_types["id"]==$row_voters["vote_type_id"]){ $checked=" CHECKED ";}ELSE{$checked=" ";}
+=======
+		$str_vote_types .= " order by displayorder; ";
+		$sql_vote_types = mysqli_query($link, $str_vote_types);
+		echo "\n<tr><td>".$row_voters["first_name"]." ".$row_voters["last_name"]."</td>";				
+		while($row_vote_types = mysqli_fetch_assoc($sql_vote_types)){
 		if(!$adding){
 
 
@@ -224,6 +242,7 @@ $checked=" CHECKED ";
 $checked = " ";
 }
 }
+>>>>>>> master
 				echo "\n<td>".$row_vote_types["vote"]."\n<input type=radio name=".$row_voters["id"]." value=".$row_vote_types["id"]."  ".$checked.">\n</td>"; 
 //			}else{
 //			}

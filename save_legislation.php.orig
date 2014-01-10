@@ -42,11 +42,17 @@ if($legislation_id=='add'){
 	$adding=false;
 }
 
+<<<<<<< HEAD
 $legislation_name=pg_escape_string($link, $_POST["legislation_name"]);
 $legislation_date=pg_escape_string($link, $_POST["legislation_date"]);
 $description=pg_escape_string($link, $_POST["description"]);
+=======
+$legislation_name=mysqli_real_escape_string($link, $_POST["legislation_name"]);
+$legislation_date=mysqli_real_escape_string($link, $_POST["legislation_date"]);
+$bill_number=mysqli_real_escape_string($link, $_POST["bill_number"]);
 $synopsis=mysqli_real_escape_string($link, $_POST["synopsis"]);
 $description=mysqli_real_escape_string($link, $_POST["description"]);
+>>>>>>> master
 $desired_vote_type_id=$_POST["desired_vote_type"];
 
 
@@ -101,8 +107,17 @@ $sql_legislation = pg_query($link, $str_legislation);
 
 }else{
 	$str_legislation  = "insert into tbl_legislation ";
+<<<<<<< HEAD
+	$str_legislation .= "(legislation_name, legislation_date, description, issue_id, body_id, year) ";
+	$str_legislation .= "VALUES ('$legislation_name', '$legislation_date', '$description', $issue_id, $body_id, $body_year);";
+=======
 	$str_legislation .= "(legislation_name, legislation_date, description, issue_id, body_id, year,synopsis,bill_number,voting_body) ";
 	$str_legislation .= "VALUES ('$legislation_name', '$legislation_date', '$description', $issue_id, $body_id, $body_year, '$synopsis','$bill_number',$voting_body)";
+
+	// add or edit legislation
+	$sql_legislation = mysqli_query($link, $str_legislation);
+	$new_id=mysqli_insert_id($link);
+>>>>>>> master
 
 	$legislation_resource= pg_query($link, $str_legislation);
 	// get recent insert id
@@ -133,19 +148,29 @@ if ($adding){
 	$str1="insert into tbl_votes(legislation_id, voter_id, vote_type_id,vote_date) VALUES";
 	$str2= " ";
 	foreach ( $_POST as $key => $value ){
+<<<<<<< HEAD
 		$kounter ++;
   		if ($kounter >6){
 	 		 echo "$key : $value <br>";
 			$str2.="(".$legislation_id.", ".$key.", ".$value.", ";
 			$str2 .= "'" . $legislation_date . "'),";
-			}
-
+		}
 	}
 	$str_tbl_votes=$str1.substr($str2,0,-2);
 	$str_tbl_votes .= ");";
 	echo $str_tbl_votes;
 	$sql_tbl_votes=pg_query($link, $str_tbl_votes);
 	echo "executed query";
+=======
+	if (is_numeric($key)){
+			$str2.="(".$new_id.", ".$key.", ".$value."), ";
+			}
+
+	}
+	$str_tbl_votes=$str1.substr($str2,0,-2);
+	echo $str_tbl_votes;
+	$sql_tbl_votes=mysqli_query($link, $str_tbl_votes);
+>>>>>>> master
 }else{
 	foreach ( $_POST as $key => $value ){
 		$kounter ++;
@@ -166,9 +191,15 @@ echo $str_tbl_votes;
 //echo "<br>".$str_tbl_votes;
 
 // xxx
+<<<<<<< HEAD
 // if (!$errors) { header('Location: index.php?id='.$legislation_id.'');
 //} else {
 //header('Location: errors.php?errormsgs='.urlencode($errormsgs));
+=======
+ if (!$errors) { header('Location: bill_detail.php?legislation_id='.$legislation_id.'');
+} else {
+header('Location: errors.php?errormsgs='.urlencode($errormsgs));
+>>>>>>> master
 
 //}
 

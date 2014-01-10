@@ -72,14 +72,79 @@ $str_all_number .= " where mtx.legislation_id = legislation.id";
 $str_all_number .= " and mtx.party_id=3)";
 $str_all_number .= " AND votes.voter_id=".$voter_id.";";
 
+<<<<<<< HEAD
     $sql_all_number  = pg_query($link, $str_all_number);
     $all_number_count = pg_numrows($sql_all_number);
     $row_all_number = pg_fetch_assoc($sql_all_number);
+//echo "<h1>".$row_good_number["thecount"]."<h1>\n";
+//echo "<h1>-----</h1>\n";
+//echo "<h1>".$row_all_number["thecount"]."</h1>\n";
+    // Get and print votes
+$TOTAL_CELLS=140;  // total number of cells in thermometer table
+$all_number=$row_all_number["thecount"];
+$good_number=$row_good_number["thecount"];
+
+echo "numbers:" . $all_number . " " . $good_number . "<br>";
+if ($all_number != 0) {
+$num_of_green_cells = intval(($TOTAL_CELLS * $good_number) / $all_number);
+}
+else {
+$num_of_green_cells = 0;
+}
+
+//echo $num_of_green_cells . "<br>";
+
+echo "<table class=votebartable>";
+echo "<tr><td style=\"color:green;\">Green</td>";
+    for ($n=0;$n<$TOTAL_CELLS-2;$n++)
+{
+echo "<td width=\"2px\" style=\"padding:0;margin:0;background-color:#ccffcc;\"> </td>";
+    }
+echo "<td style=\"color:red;text-align:right;\">Ungreen</td></tr>\n";
+echo "<tr style=\"height:25px;\">\n";
+
+for ($n=0;$n<$num_of_green_cells;$n++)
+{echo "<td width=\"2px\" style=\"padding:0;margin:0;background-color:green;\"> </td>";
+}
+for ($n=0;$n<$TOTAL_CELLS-$num_of_green_cells;$n++){
+echo "<td width=\"2px\" style=\"padding:0;margin:0;background-color:red;\"> </td>";
+ }
+echo "</tr></table>\n";
+
+
+//$TOTAL_CELLS=300;  // total number of cells in thermometer table
+$all_number=$row_all_number["thecount"];
+$good_number=$row_good_number["thecount"];
+echo "<br>all_number: ".$all_number;
+echo "<br>good_number: ".$good_number;
+echo "<br>num_of_green_cells: ".$num_of_green_cells;
+
+echo "<table border=1 align=center color=white>";
+echo "<tr><td style=\"color:green;\">Green</td>";
+    for ($n=0;$n<$TOTAL_CELLS-2;$n++)
+{
+echo "<td width=\"1px\" style=\"padding:0;margin:0;background-color:white;\"> </td>";
+    }
+echo "<td style=\"color:red;text-align:right;\">Ungreen</td></tr>\n";
+echo "<tr style=\"height:25px;\">\n";
+
+for ($n=0;$n<$num_of_green_cells;$n++)
+{echo "<td width=\"1px\" style=\"padding:0;margin:0;background-color:green;\"> </td>";
+}
+for ($n=0;$n<$TOTAL_CELLS-$num_of_green_cells;$n++){
+echo "<td width=\"1px\" style=\"padding:0;margin:0;background-color:red;\"> </td>";
+ }
+echo "</tr></table>\n";
+=======
+    $sql_all_number  = mysqli_query($link, $str_all_number);
+    $all_number_count = mysqli_num_rows($sql_all_number);
+    $row_all_number = mysqli_fetch_assoc($sql_all_number);
     echo "<div style=\"font-family:sans;font-size:small;\">";
 	echo "<span style=\"color:red;font-weight:bold;\">".$row_voter["first_name"]." ".$row_voter["last_name"]."</span>&nbsp;&nbsp;";
     echo $row_voter["party_name"].", " . $row_voter["district"] . " " 
     
     .$row_voter["body_name"] . "&nbsp;&nbsp;";
+>>>>>>> master
 
 
 echo "<span style=\"color:red;font-weight:bold;\">Rating: " . $row_good_number["thecount"] . "/" . $row_all_number["thecount"] ;
@@ -113,8 +178,12 @@ $str_bill = "SELECT votes.vote_type_id, mtx.desired_vote_type_id, vote_types.vot
 $alternate_shade = false;
 
     echo "<table class=bottomtable>\n";
+<<<<<<< HEAD
     while($row_votes = pg_fetch_assoc($sql_bill)){
+=======
+	echo "<tr><th style=\"width:100px;\">Date</th><th style=\"width:200px;\">Bill</th><th>Bill Number</th><th>Description</th><th>Vote</th></tr>";
     while($row_votes = mysqli_fetch_assoc($sql_bill)){
+>>>>>>> master
    	if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
            $span = " style=\"background-color:" . $bgcolor1 . ";\"";
 	} else {

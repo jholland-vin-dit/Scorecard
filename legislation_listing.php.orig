@@ -58,6 +58,16 @@ $sql_legislation = pg_query($link, $str_legislation);
 //$row_legislation = pg_fetch_assoc($sql_legislation1);
 //echo $str_legislation;
 echo "<table class=\"bottomtable\">";
+<<<<<<< HEAD
+echo "<tr><td bgcolor=lightblue  align=right colspan=4><a href='edit_legislation.php?add=T'>Add Legislation</a></td></tr>";
+//echo "<th bgcolor=lightblue>Bill</th><th bgcolor=pink>Date</th><th bgcolor=green>Description</th>";
+while($row_legislation = pg_fetch_assoc($sql_legislation)){
+//"edit_legislation.php?id=".$row_legislation["id"];
+echo "<tr><td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legislation_id=".$row_legislation["id"]."\">".$row_legislation["legislation_name"]."</a></td>";
+echo "<td valign=top  bgcolor=pink width=25%>".$row_legislation["legislation_date"]."</td>";
+echo "<td valign=top  bgcolor=lightgreen>".$row_legislation["description"]."</td>";
+echo "<td valign=top  bgcolor=lightgreen><a href='edit_legislation.php?legislation_id=".$row_legislation["id"]."'>edit</a></td>";
+=======
 if ( $_SESSION["root"]) { 
 echo "<tr><td><form action=\"publish.php\" method=POST><input type=\"submit\" value=\"Apply Published states\"></td></tr>";
 echo "<input type=\"hidden\" name=\"issue_id_save\" value=\"" . $_GET["issue_id"] . "\">";
@@ -101,13 +111,20 @@ echo "<td valign=top  bgcolor=lightgreen>".$row_legislation["description"]."</td
 if ($_SESSION["user"]) { 
 echo "<td valign=top  bgcolor=lightgreen><a href='edit_legislation.php?legislation_id=".$row_legislation["id"]."'>edit</a>&nbsp;&nbsp;&nbsp;<a href='delete_legislation.php?legislation_id=".$row_legislation["id"]."'>delete</a></td>";
 
+>>>>>>> master
 echo "</tr>";
 echo "</tr><tr><td colspan=4 valign=top bgcolor=papayawhip>".$row_legislation["synopsis"]."</td><td>&nbsp;</td></tr>";
 
 }
+<<<<<<< HEAD
+echo "</table>";
+
+=======
 
 }
 echo "</form></table>";
+mysqli_free_result($sql_legislation);
+>>>>>>> master
 
 // Get and print legislation again in table
 $str_legislation = "select * from tbl_legislation legislation ";

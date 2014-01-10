@@ -30,11 +30,17 @@ $body_year=$_SESSION["body_year"];
 
 $legislation_id=$_GET["legislation_id"];
 $_SESSION["legislation_id"]=$legislation_id;
+<<<<<<< HEAD
+$str_bill = "SELECT l.issue_id,i.title issue_title,l.issue_id,l.legislation_name legislation_name, " .
+" l.description description, l.legislation_date legislation_date , b.name,y.year " .
+"FROM tbl_legislation l, tbl_bodies b, tbl_years y,tbl_issues i " .
+=======
 $str_bill = "SELECT l.bill_number bill_number,i.title issue_title,l.issue_id,l.legislation_name legislation_name,l.synopsis synopsis, " .
 " l.description description, l.legislation_date legislation_date , b.name,y.year,vote_types.vote, vb.name voting_body_name " .
-"FROM tbl_legislation l, tbl_bodies b, tbl_years y,tbl_issues i " .
+" FROM `tbl_legislation` l, tbl_bodies b, tbl_years y,tbl_issues i, " .
  " mtx_legis_party_desired_vote_types mtx, " .
  " tbl_vote_types vote_types, tbl_voting_bodies vb " .
+>>>>>>> master
 " WHERE l.year = y.year " .
 " AND l.body_id = b.id " .
 " AND i.id=l.issue_id " .
@@ -43,7 +49,7 @@ $str_bill = "SELECT l.bill_number bill_number,i.title issue_title,l.issue_id,l.l
 " and l.id = " . $legislation_id  .
 " and l.voting_body = vb.id;";
 
-//echo $str_bill;
+echo $str_bill;
 
 $sql_bill = pg_query($link, $str_bill);
 $bill_count = pg_numrows($sql_bill);

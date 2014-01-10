@@ -73,8 +73,14 @@ selectObj.form.submit();
 		$current_color=$color1;
 		$color_toggle=true;
 
+<<<<<<< HEAD
+echo "<tr><td><h1>Issues:</h1></td></tr> ";
       if ($sql_issues = pg_query($link, $sql_issues)) {
       	while($row_issues = pg_fetch_assoc($sql_issues))
+=======
+      if ($sql_issues = mysqli_query($link, $sql_issues)) {
+      	while($row_issues = mysqli_fetch_assoc($sql_issues))
+>>>>>>> master
 
 		{
 			if (!$color_toggle){
