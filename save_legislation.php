@@ -23,9 +23,9 @@ session_start();
 ?>
 <!--?php include 'list_sessions.php'; ?-->
 <?php
-//	foreach ( $_POST as $key => $value ){
-//	 		 echo "$key : $value <br>";
-//	}
+	foreach ( $_POST as $key => $value ){
+	 		 echo "$key : $value <br>";
+	}
 include ("connection_string.php");
 $body_id=$_SESSION["body_id"];
 $body_year=$_SESSION["body_year"];
@@ -33,6 +33,7 @@ $party_id=$_SESSION["party_id"];
 
 $legislation_id=$_POST["legislation_id"];
 $desired_vote_type=$_POST["desired_vote_type"];
+$voting_body=$_POST["voting_body"];
 // echo $legislation_id." ss<br>";
 if($legislation_id=='add'){
 	$issue_id=$_POST["issue_id"];
@@ -43,21 +44,51 @@ if($legislation_id=='add'){
 
 $legislation_name=mysqli_real_escape_string($link, $_POST["legislation_name"]);
 $legislation_date=mysqli_real_escape_string($link, $_POST["legislation_date"]);
+$bill_number=mysqli_real_escape_string($link, $_POST["bill_number"]);
+$synopsis=mysqli_real_escape_string($link, $_POST["synopsis"]);
 $description=mysqli_real_escape_string($link, $_POST["description"]);
 $desired_vote_type_id=$_POST["desired_vote_type"];
 
+
+//date should be YYYY-MM-DD
+
+$year = substr($legislation_date,0,4);
+$month = substr($legislation_date,5,2);
+$day = substr($legislation_date,8,2);
+
+echo "$year   $month    $day";
+
+$gooddate = true;
+$errors=false;    
+$errormsgs="";
+if (is_numeric($year) && is_numeric($month) && is_numeric($day)) {
+	
+	if (!checkdate($month,$day,$year)) {	
+		$gooddate = false;
+		$errormsgs .= "invalid date";
+}
+} else {
+	$gooddate = false;
+	$errormsgs .= "non-numeric date";
+}
+
+if (!$gooddate) {
+	$errors = true;
+}
+
+echo $legislation_date;
 
 //echo $event_id."<br>";
 //echo $title."<br>";
 //echo $subtitle."<br>";
 //echo $description."<br>";
 //echo $pro_environment_vote."<br>";
-//echo $synopsis;
+//echo "SYNOPSIS:" . $synopsis;
 
 
 if(!$adding){
 	$str_legislation  = "update tbl_legislation ";
-	$str_legislation .= "set legislation_name='$legislation_name', legislation_date='$legislation_date', description='$description' ";
+	$str_legislation .= "set legislation_name='$legislation_name', legislation_date='$legislation_date', description='$description',bill_number='$bill_number',synopsis='$synopsis',voting_body=$voting_body ";
 	$str_legislation .= "where id=".$legislation_id.";" ;
 
 	$str_desired_vote_type  = "update mtx_legis_party_desired_vote_types ";
@@ -70,8 +101,8 @@ $sql_legislation = mysqli_query($link, $str_legislation);
 
 }else{
 	$str_legislation  = "insert into tbl_legislation ";
-	$str_legislation .= "(legislation_name, legislation_date, description, issue_id, body_id, year) ";
-	$str_legislation .= "VALUES ('$legislation_name', '$legislation_date', '$description', $issue_id, $body_id, $body_year)";
+	$str_legislation .= "(legislation_name, legislation_date, description, issue_id, body_id, year,synopsis,bill_number,voting_body) ";
+	$str_legislation .= "VALUES ('$legislation_name', '$legislation_date', '$description', $issue_id, $body_id, $body_year, '$synopsis','$bill_number',$voting_body)";
 
 	// add or edit legislation
 	$sql_legislation = mysqli_query($link, $str_legislation);
@@ -98,14 +129,13 @@ if ($adding){
 	$str1="insert into tbl_votes(legislation_id, voter_id, vote_type_id) VALUES";
 	$str2= " ";
 	foreach ( $_POST as $key => $value ){
-		$kounter ++;
-  		if ($kounter >6){
-//	 		 echo "$key : $value <br>";
+	if (is_numeric($key)){
 			$str2.="(".$new_id.", ".$key.", ".$value."), ";
-		}
+			}
+
 	}
 	$str_tbl_votes=$str1.substr($str2,0,-2);
-//	echo $str_tbl_votes;
+	echo $str_tbl_votes;
 	$sql_tbl_votes=mysqli_query($link, $str_tbl_votes);
 }else{
 	foreach ( $_POST as $key => $value ){
@@ -127,6 +157,10 @@ if ($adding){
 //echo "<br>".$str_tbl_votes;
 
 // xxx
- header('Location: index.php?id='.$legislation_id.'');
+ if (!$errors) { header('Location: bill_detail.php?legislation_id='.$legislation_id.'');
+} else {
+header('Location: errors.php?errormsgs='.urlencode($errormsgs));
+
+}
 
 ?>

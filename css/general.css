@@ -70,6 +70,23 @@ td.votebartable {
 	vertical-align:top;
  }
  
+table.bottomtablenowidth {
+	margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9pt;
+  color: #033333;
+	font-weight: normal;
+	text-align: left;
+	padding-top:.1em;
+  	padding-right:.1em;
+  	padding-left:.1em;
+  	padding-bottom:.1em;
+  	background-color: #ECF6CE;
+	border: solid;
+  border-width: 1px 1px 1px 1px;
+  border-color: #0c7a40;
+}
+
 
 table.bottomtable { 
 	width: 840px;

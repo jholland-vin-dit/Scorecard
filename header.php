@@ -1,7 +1,6 @@
 <?php
  /*
- This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holla
-nd.
+ This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holla nd.
 
     Scorecard is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -26,6 +25,19 @@ nd.
 	</title>
 	  	<link rel="stylesheet" type="text/css" href="css/general.css" />
   		<link rel="stylesheet" type="text/css" href="css/calendar.css" />
+
+<script type="text/javascript" src="script/jquery-1.10.2.min.js"></script>
+
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script>
+$(function() {
+$( "#datepicker" ).datepicker();
+    $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd");
+});
+</script>
   </head>
 <body>
 <?php include 'connection_string.php'; ?>
@@ -52,11 +64,22 @@ if ($sql_body = mysqli_query($link, $str_body)) {
 }
 $row_body = mysqli_fetch_assoc($sql_body);
 
-echo "<table bgcolor='#ECF6CE' width=840 cellpadding=0 cellspacing=0 border=0 align=center>";
-echo "<tr><td><font size=6><a href='index.php'><img src='images/header.gif' alt='Legislative Analyst'></a></font></td></tr>";
-echo "<tr><td><font size=5>";
+echo "<table style=\"background-color:198a1d;\"  width=840 cellpadding=0 cellspacing=0 border=0 align=center>";
+echo "<tr><td><a href='index.php'><img style=\"width:50%;height:50%;\" src='images/header.gif' alt='Green Party Scorecard'></a></td></tr>";
+echo "<tr><td>";
 echo $row_body["name"]."/".$body_year ;
 echo "</td>" ;
 echo "</tr>";
+if ($page_name <> "index.php") {
+echo "<tr><td>";
+echo "<a style=\"color:yellow;\" href=\"index.php\">Return to front page</a>";
+echo "</td></tr>"; 
+
+}
+
+echo "<tr><td><div style=\"height:6px;background-color:198a1d;\">&nbsp;</div></td></tr>"; 
+if ($_SESSION['user'])  {
+echo "<tr><td><a href=\"login.php\">Login/Logout page</a></td></tr>";
+}
 echo "</table>";
-?>
+

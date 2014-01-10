@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>
+    	Voter Scorecard Login	</title>
+	  	<link rel="stylesheet" type="text/css" href="css/general.css" />
+  		<link rel="stylesheet" type="text/css" href="css/calendar.css" />
+
+<script type="text/javascript" src="script/jquery-1.10.2.min.js"></script>
+
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script>
+$(function() {
+$( "#datepicker" ).datepicker();
+    $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd");
+});
+</script>
+  </head>
+<body>
+<!--?php include 'list_sessions.php'; ?-->
+<table style="background-color:198a1d;"  width=840 cellpadding=0 cellspacing=0 border=0 align=center>
+<tr><td><a href='index.php'><img style="width:50%;height:50%;" src='images/header.gif' alt='Green Party Scorecard'></a></td></tr>
+
+<tr><td>Montgomery County MD Council/2013</td></tr>
+<tr><td><a style="color:yellow;" href="index.php">Return to front page</a></td></tr>
+<tr><td><div style="height:6px;background-color:198a1d;">&nbsp;</div></td></tr</table><br> user: fred logged in successfully <br><h1>Login</h1>
+<form action="login.php" method="post">
+    Username:<br />
+    <input type="text" name="username" value="" />
+    <br /><br />
+    Password:<br />
+    <input type="password" name="password" value="" />
+    <br /><br />
+    <input type="submit" value="Login" />
+</form>
+<form action="logout.php" method="post">
+	<input type="submit" value="Logout" />
+</form>
+<h3>Change password</h3>
+<form action="chpasswd.php" method="post">
+Username: <input type="text" name="username" value="" > <br/>
+Old Password: <input type="password" name="oldpassword" value="" > <br/>
+New Password: <input type="password" name="newpassword1" value=""></br/>
+New Password(confirm): <input type="password" name="newpassword2" value=""></br/>
+<input type="submit" value="Change password">
+</form>
+
+</body>
+</html>

@@ -1,7 +1,6 @@
 <?php
  /*
- This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holla
-nd.
+ This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holland.
 
     Scorecard is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -37,7 +36,7 @@ $_SESSION["body_year"]=$body_year;
 ?>
 <?php
 $page_name="index.php";
-$page_title = "Legislative analyst home page";
+$page_title = "Voter Scorecard";
 
 $legislation_issues_to_view = ' is not null ';
 $heading_clause = ' for all issues ';
@@ -51,38 +50,13 @@ if (selectObj.value != ''){
 selectObj.form.submit();
 }
 </script>
-<?php 
-echo "<table class=bottomtable>";
-echo "<tr><td>";
-?>
 <?php  include 'header.php'; ?>
 
-<?php
-// specific to home page
 
-echo "<table class=bottomtable>";
-echo "<tr><td  align=right>";
-echo "<form action=\"". $page_name ;
-echo "\" method=\"GET\">\n";
-echo "<select name=\"body_year\" onchange=\"myfunc(this);\">";
-echo "<option value=\"\">Select a year</option>\n";
-echo "<option value=\"1994\"";
-if ($body_year == 1994) { echo " selected  ";}
-echo ">1994</option>\n";
-echo "<option value=\"2013\" ";
-if ($body_year == 2013) { echo " selected ";}
-echo ">2013</option>\n";
-echo "</select></form>\n";
-echo "</td>";
-echo "</tr>";
-echo "</table>";
-?>
-
-<?php  include 'voters_ratings.php' ; ?>
-<table class=bottomtable><tr><td>
-    <font size=3>Issues</font>
-</td<tr><table>
-
+<table class="bottomtable"><tr><td width="65%">
+<?php  include 'http://192.168.61.98/Scorecard/voters_ratings.php' . '?issue_id=0&heading_clause=' . urlencode($heading_clause)   ; ?>
+</td>
+<td width="35%"> 
     <?php 
         /* check connection */
       if (mysqli_connect_errno()) {
@@ -90,24 +64,19 @@ echo "</table>";
 	exit();
       }
      echo "<br>";
-//     $sql_issues=
-//"select issues.title title, name, issues.id as issue_id, \n" .
-//"issues.description, issues.pro_environment_vote from tbl_issues issues " . 
-//" inner join tbl_big_issues big_issues on issues.big_issue_id=big_issues.id " .
-//" order by big_issues.name, issues.title desc ;";
      $sql_issues=
 "select issues.title title, subtitle, synopsis, name, issues.id as issue_id, \n" .
 "issues.description, issues.pro_environment_vote from tbl_issues issues " . 
 " inner join tbl_big_issues big_issues on issues.big_issue_id=big_issues.id " .
 " order by issues.title desc ;";
-      if ($sql_issues = mysqli_query($link, $sql_issues)) {
-      echo "<table class=bottomtable>\n";
-		$color1="#EAECC9";
-		$color2="CBECC9";
+      echo "<table class=\"bottomtablenowidth\">\n";
+      echo "<tr><td><font size=\"4\">All Issues</font></td></tr>\n";
 		$current_color=$color1;
 		$color_toggle=true;
-//      $big_issue_name="";
+
+      if ($sql_issues = mysqli_query($link, $sql_issues)) {
       	while($row_issues = mysqli_fetch_assoc($sql_issues))
+
 		{
 			if (!$color_toggle){
 				$current_color=$color1;
@@ -117,35 +86,30 @@ echo "</table>";
 				$color_toggle=false;
 			}
 			
-			//	  	if($big_issue_name<>$row_issues["name"]){
-			//	    	echo "<tr><td colspan=3 bgcolor=tan>".$row_issues["name"]."</tr></td>\n";
-			//	    	$big_issue_name=$row_issues["name"];
-			//	  	}
-			echo "<tr>\n";
 	  		$str_legislation = "select * from tbl_legislation " .
 	  		"where issue_id = " . $row_issues["issue_id"] . 
 	  		" and tbl_legislation.year = " . $body_year . ";";
-//	  		echo $str_legislation;
+
+			echo "<tr>\n";
 	  		if ($sql_legislation = mysqli_query($link, $str_legislation)){
 	           	echo "<td valign=top bgcolor=".$current_color."><font size=4><b>\n";
 	    	    echo "<a href=\"legislation_listing.php?issue_id=".$row_issues["issue_id"]."\">\n";
-	    	    echo $row_issues["title"]."</a></b></font><br><font size=3><i>".$row_issues["subtitle"]."</i><br>\n";
-	    	    echo $row_issues["description"]."<br><i>".$row_issues["pro_environment_vote"]."</i> is the pro-environment vote.</b></td>\n";
-	    	    echo "<td width=30% valign=top bgcolor=".$current_color."><b><font size=2>".$row_issues["synopsis"]."</font></td>\n";
-	    	    echo "</tr>\n";
+	    	    echo $row_issues["title"]."</a></b></font>\n";
+	    	    echo "</td></tr>\n";
 	  		} // if sql_legislation
        } //while
-	  echo "</table>\n";
      } //if
+	  echo "</table>\n";
 	  mysqli_free_result($sql_voters);
 	  mysqli_free_result($sql_legislation);
 mysqli_close(); // do this for tidyness
 	    // now to leave PHP and go back to straight HTML
 //echo "end s:" .$_SESSION["body_year"]."<br>";
+
     ?>
-  </table>
-</td></tr>
-</table>
+
+</td></tr></table>
+
 
 </body>
 </html>

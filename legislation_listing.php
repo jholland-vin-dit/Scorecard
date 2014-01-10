@@ -35,13 +35,15 @@ $sql_issue = mysqli_query($link, $str_issue);
 $row_issue = mysqli_fetch_assoc($sql_issue);	
 // echo $str_issue;
 
-echo "<table class=bottomtable>"; 
-echo "<tr><td colspan=3><h3>Issue:".$row_issue["title"]."</td><td><a href=\"edit_issue.php?id=".$row_issue["id"]."\">edit</a></h3>\n</td></tr>";
-echo "<th bgcolor=orange>SubTitle</th><th bgcolor=orange>Description</th><th bgcolor=orange>Pro environment</th><th bgcolor=orange>Synopsis</th>";
+echo "<table class=bottomtable>";
+echo "<tr><td colspan=3><span style=\"font-weight:bold;\">Issue: ".$row_issue["title"]."</td>";
+
+if ($_SESSION["user"]) { 
+echo "<td><a href=\"edit_issue.php?id=".$row_issue["id"]."\">edit</a></h3>\n</td>";
+}
+echo "</tr>";
 echo "<tr>";
-echo "<td>".$row_issue["subtitle"]."</td>";
-echo "<td valign=top>".$row_issue["description"]."</td><td>".$row_issue["pro_environment_vote"]."</td>";
-echo "<td valign=top>".$row_issue["synopsis"]."</td>";
+echo "<td valign=top>".$row_issue["description"]."</td>";
 echo "</tr>";
 echo "</table>";
 
@@ -55,19 +57,57 @@ $sql_legislation = mysqli_query($link, $str_legislation);
 // print initial list of legislation
 //$row_legislation = mysqli_fetch_assoc($sql_legislation1);
 //echo $str_legislation;
-
 echo "<table class=\"bottomtable\">";
-echo "<tr><td bgcolor=lightblue  align=right colspan=4><a href='edit_legislation.php?add=T'>Add Legislation</a></td></tr>";
-//echo "<th bgcolor=lightblue>Bill</th><th bgcolor=pink>Date</th><th bgcolor=green>Description</th>";
-while($row_legislation = mysqli_fetch_assoc($sql_legislation)){
-//"edit_legislation.php?id=".$row_legislation["id"];
-echo "<tr><td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legislation_id=".$row_legislation["id"]."\">".$row_legislation["legislation_name"]."</a></td>";
-echo "<td valign=top  bgcolor=pink width=25%>".$row_legislation["legislation_date"]."</td>";
-echo "<td valign=top  bgcolor=lightgreen>".$row_legislation["description"]."</td>";
-echo "<td valign=top  bgcolor=lightgreen><a href='edit_legislation.php?legislation_id=".$row_legislation["id"]."'>edit</a></td>";
-echo "</tr>";
+if ( $_SESSION["root"]) { 
+echo "<tr><td><form action=\"publish.php\" method=POST><input type=\"submit\" value=\"Apply Published states\"></td></tr>";
+echo "<input type=\"hidden\" name=\"issue_id_save\" value=\"" . $_GET["issue_id"] . "\">";
 }
-echo "</table>";
+
+if ($_SESSION["user"] || $_SESSION["root"]) { 
+echo "<tr bgcolor=lightblue ><td >Published</td><td>Legislation</td><td style=\"width:30px;\">Bill #</td><td style=\"width:50px;\">Date<td>Description</td><td align=right colspan=4><a href='edit_legislation.php?add=T'>Add Legislation</a></td></tr>";
+}
+ else {
+echo "<tr bgcolor=lightblue ><td>Legislation</td><td style=\"width:30px;\">Bill #</td><td style=\"width:50px;\">Date<td>Description</td><td align=right colspan=4></td></tr>";
+
+
+}
+while($row_legislation = mysqli_fetch_assoc($sql_legislation)){
+
+
+if ( $_SESSION["root"]) { 
+echo "<tr><td>Published:<br><input type=\"radio\"  name=\"published".$row_legislation["id"]. "\" value=\"true\" " .  ($row_legislation["published"]  ? "checked ":"") . ">Yes<input type=\"radio\" name=\"published".$row_legislation["id"]."\" value=\"false\"" .  (!$row_legislation["published"]  ? "checked ":"") . ">No</td><td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legislation_id=".$row_legislation["id"]."\">".$row_legislation["legislation_name"]."</a></td>";
+}
+if ( 
+(!$_SESSION["user"] && !$_SESSION["root"] && $row_legislation["published"]) // published, non special user
+|| ($_SESSION["user"] && !$SESSION["root"]) ) // user but not root
+{
+
+if ($_SESSION["user"] && !$_SESSION["root"]) {
+ echo "<tr><td>" . ($row_legislation["published"] ? "Y" : "N" ) . "</td>" ;
+echo "<td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legislation_id=".$row_legislation["id"]."\">".$row_legislation["legislation_name"]."</a></td>";
+} 
+if (!$_SESSION["user"]) {
+echo "<tr>";
+echo "<td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legislation_id=".$row_legislation["id"]."\">".$row_legislation["legislation_name"]."</a></td>";
+}
+
+
+
+
+echo "<td valign=top>".$row_legislation["bill_number"]."</td><td valign=top  bgcolor=pink >".$row_legislation["legislation_date"]."</td>";
+echo "<td valign=top  bgcolor=lightgreen>".$row_legislation["description"]."</td>";}
+
+
+if ($_SESSION["user"]) { 
+echo "<td valign=top  bgcolor=lightgreen><a href='edit_legislation.php?legislation_id=".$row_legislation["id"]."'>edit</a>&nbsp;&nbsp;&nbsp;<a href='delete_legislation.php?legislation_id=".$row_legislation["id"]."'>delete</a></td>";
+
+echo "</tr>";
+echo "</tr><tr><td colspan=4 valign=top bgcolor=papayawhip>".$row_legislation["synopsis"]."</td><td>&nbsp;</td></tr>";
+
+}
+
+}
+echo "</form></table>";
 mysqli_free_result($sql_legislation);
 
 // Get and print legislation again in table
@@ -119,8 +159,11 @@ echo "</table>\n";
 $legislation_issues_to_view = " = " . $issue_id;
 $heading_clause = "for this issue";
 ?>
+<?php // below would print ratings of voters on this issue
+//  include 'http://192.168.61.98/Scorecard/voters_ratings.php' . '?issue_id=' . $issue_id . '&heading_clause=' . urlencode($heading_clause) ; 
 
-<?php  include 'voters_ratings.php' ; ?>
+?>
+
 
 <?php
 /*

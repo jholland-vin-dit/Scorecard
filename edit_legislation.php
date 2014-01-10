@@ -21,6 +21,8 @@ nd.
 <?php 
 session_start();
 include ("connection_string.php");
+
+if (isset($_SESSION["user"])) {
 if (isset($_GET["legislation_id"])){
 	$adding=false;
 	$text="Edit";
@@ -32,6 +34,7 @@ if (isset($_GET["legislation_id"])){
 	$sql_legis_party_desired_vote_type = mysqli_query($link, $str_legis_party_desired_vote_type);
 	$row_legis_party_desired_vote_type = mysqli_fetch_assoc($sql_legis_party_desired_vote_type);
 	$legis_party_desired_vote_type_id=$row_legis_party_desired_vote_type["desired_vote_type_id"];
+
 //	echo $str_legis_party_desired_vote_type."<br>";
 //	echo "legis_party_desired_vote_type_id: ".$legis_party_desired_vote_type_id;
 	$legis_party_desired_vote_type_on=true;
@@ -45,6 +48,9 @@ if (isset($_GET["legislation_id"])){
 ?>
 <?php include 'header.php'; ?>
 
+<script>
+</script>
+
 <?php
 $issue_id=$_SESSION["issue_id"];
 $str_issue = "select * from tbl_issues ";
@@ -56,10 +62,12 @@ $issue=$row_issue["title"];
 
 // vote types for dropdown
 $str_vote_types = "select * from tbl_vote_types ";
-$str_vote_types .= " order by vote; ";
+$str_vote_types .= " order by displayorder; ";
 $sql_vote_types = mysqli_query($link, $str_vote_types);
 
-
+$str_voting_bodies = "select * from tbl_voting_bodies ";
+$str_voting_bodies .= " order by displayorder; ";
+$sql_voting_bodies = mysqli_query($link, $str_voting_bodies);
 
 // $issue_id=$_GET["issue_id"];
 echo "<table class=bottomtable>";
@@ -81,7 +89,10 @@ if(!$adding){
 	// echo $str_legislation;
 	$legislation_name=htmlspecialchars($row_legislation["legislation_name"], ENT_QUOTES);
 	$legislation_date=$row_legislation["legislation_date"];
+	$bill_number=$row_legislation["bill_number"];
 	$description=$row_legislation["description"];
+	$synopsis = $row_legislation["synopsis"];
+	$legis_voting_body = $row_legislation["voting_body"];
 	echo " <input type=hidden name='legislation_id' value=".$legislation_id.">";
 	// echo"<td bgcolor=lightblue align=right><a href='edit_legislation.php?add=T'>Add</a></td>";
 	mysqli_free_result($sql_legislation);
@@ -91,9 +102,9 @@ if(!$adding){
 	$description="";
 	echo " <input type=hidden name='legislation_id' value='add'>";
 	echo "<input type=hidden name=issue_id value=".$issue_id.">";
-}
-
-
+} 
+?>
+<?php
 // now comes the desired vote dropdown
 echo"\n<td bgcolor=lightblue align=right>Green Party preferred vote: ";
 echo "\n<select name=desired_vote_type>";
@@ -119,12 +130,45 @@ echo "<tr>";
 echo "<td valign=top  bgcolor=#ACFA58>";
 echo "Date: </td>"; 
 echo "<td valign=top  bgcolor=#ACFA58>";
-echo "<input size=10 maxlength=10 type=text name='legislation_date' value='".$legislation_date."'></td></tr>";
+echo "<input size=10 maxlength=10 type=text id='datepicker' name='legislation_date' value='".$legislation_date."'></td></tr>";
 echo "<tr>";
+
+echo "<td valign=top  bgcolor=#ACFA58> ";
+echo "Bill #: </td>"; 
+echo "<td valign=top  bgcolor=#ACFA58>";
+echo "<input type=\"text\" name='bill_number' length=\"14\" value=\"".$bill_number."\"></td></tr>";
+echo "<tr>";
+
+echo "<td valign=top  bgcolor=#ACFA58> ";
+echo "Voting Body: </td>"; 
+echo "<td valign=top  bgcolor=#ACFA58>";
+echo "<select name=voting_body>";
+while($row_voting_bodies = mysqli_fetch_assoc($sql_voting_bodies)){
+		if($legis_voting_body==$row_voting_bodies["id"]){
+			$selected = " selected ";
+		}else{
+			$selected = " ";
+		}
+
+	echo "\n<option value=".$row_voting_bodies["id"]." ".$selected." >".$row_voting_bodies["name"]."</option>";
+}
+
+echo "</select>";
+
+
+
+echo "</td></tr><tr>";
+
 echo "<td valign=top  bgcolor=#ACFA58> ";
 echo "Description: </td>"; 
 echo "<td valign=top  bgcolor=#ACFA58>";
 echo "<textarea cols='50' rows='10' name='description'>".$description."</textarea></td></tr>";
+echo "<tr>";
+
+echo "<td valign=top  bgcolor=#ACFA58> ";
+echo "Synopsis: </td>"; 
+echo "<td valign=top  bgcolor=#ACFA58>";
+echo "<textarea cols='50' rows='10' name='synopsis'>".$synopsis."</textarea></td></tr>";
 
 echo "<tr><td colspan=2>";
 echo "<table class=bottomtable>";
@@ -140,12 +184,18 @@ if($adding){
 	$sql_voters = mysqli_query($link, $str_voters);
 	while($row_voters = mysqli_fetch_assoc($sql_voters)){
 		$str_vote_types = "select * from tbl_vote_types ";
-		$str_vote_types .= " order by vote; ";
+		$str_vote_types .= " order by displayorder; ";
 		$sql_vote_types = mysqli_query($link, $str_vote_types);
 		echo "\n<tr><td>".$row_voters["first_name"]." ".$row_voters["last_name"]."</td>";				
 		while($row_vote_types = mysqli_fetch_assoc($sql_vote_types)){
 //			if($adding){
-				echo "\n<td>".$row_vote_types["vote"]."\n<input type=radio name=".$row_voters["id"]." value=".$row_vote_types["id"].">\n</td>"; 
+		$checked = ''; //default
+
+		if ($row_vote_types["id"] == -1 ) { //signature for N/A
+			$checked = " checked ";
+		}
+
+				echo "\n<td>".$row_vote_types["vote"]."\n<input type=radio name=".$row_voters["id"]. $checked ." value=".$row_vote_types["id"].">\n</td>"; 
 //			}else{
 //			}
 		}
@@ -159,12 +209,21 @@ if($adding){
 	$sql_voters = mysqli_query($link, $str_voters);
 	while($row_voters = mysqli_fetch_assoc($sql_voters)){
 		$str_vote_types = "select * from tbl_vote_types ";
-		$str_vote_types .= " order by vote; ";
+		$str_vote_types .= " order by displayorder; ";
 		$sql_vote_types = mysqli_query($link, $str_vote_types);
 		echo "\n<tr><td>".$row_voters["first_name"]." ".$row_voters["last_name"]."</td>";				
 		while($row_vote_types = mysqli_fetch_assoc($sql_vote_types)){
-//			if(!$adding){
-				if ($row_vote_types["id"]==$row_voters["vote_type_id"]){ $checked=" CHECKED ";}ELSE{$checked=" ";}
+		if(!$adding){
+
+
+			if ($row_vote_types["id"]==$row_voters["vote_type_id"])
+
+{ 
+$checked=" CHECKED ";
+} else {
+$checked = " ";
+}
+}
 				echo "\n<td>".$row_vote_types["vote"]."\n<input type=radio name=".$row_voters["id"]." value=".$row_vote_types["id"]."  ".$checked.">\n</td>"; 
 //			}else{
 //			}
@@ -181,7 +240,16 @@ echo "\n</table>";
 echo "\n</form>";
 //$clean_string = mysql_real_escape_string($string);
 // $output = stripslashes($db_string);
+} else {
 
+echo "<h1>Not logged in</h1>";
+}
 ?>
+<script>
+function fixdate(){
+$("#datepicker").datepicker("setDate","<?php echo $legislation_date ?>");
+}
+$(document).ready(fixdate);  
+</script>
 </body>
 </html>
