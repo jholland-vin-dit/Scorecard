@@ -77,7 +77,9 @@ echo "</td></tr>";
 
 }
 
-
+echo "<tr><td><div style=\"height:6px;background-color:198a1d;\">&nbsp;</div></td></tr>"; 
+if ($_SESSION['user'])  {
+echo "<tr><td><a href=\"login.php\">Login/Logout page</a></td></tr>";
+}
 echo "</table>";
-echo "<div style=\"height:6px;background-color:198a1d;\">&nbsp;";
-echo "</div>"; 
+

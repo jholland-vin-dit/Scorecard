@@ -55,7 +55,7 @@ $sql_query = mysqli_query($link, $query);
         $login_ok = false;
         
             $check_password = hash('sha256', $_POST['password'] );
-            //$check_password =  $_POST['password'] ;
+
             if($check_password === $row['password'])
             {
                 $login_ok = true;
@@ -64,6 +64,9 @@ $sql_query = mysqli_query($link, $query);
         if($login_ok)
         {
             $_SESSION['user'] = $row['username'];
+	    if ($row['username'] == 'root'){
+	    $_SESSION['root'] = 'root';
+}
 
         	echo "<br> user: " . $_SESSION['user'] . " logged in successfully <br>";    
         }
@@ -92,5 +95,14 @@ if(isset($_SESSION['user']))
 <form action="logout.php" method="post">
 	<input type="submit" value="Logout" />
 </form>
+<h3>Change password</h3>
+<form action="chpasswd.php" method="post">
+Username: <input type="text" name="username" value="" > <br/>
+Old Password: <input type="password" name="oldpassword" value="" > <br/>
+New Password: <input type="password" name="newpassword1" value=""></br/>
+New Password(confirm): <input type="password" name="newpassword2" value=""></br/>
+<input type="submit" value="Change password">
+</form>
+
 </body>
 </html>

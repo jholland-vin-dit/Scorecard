@@ -57,17 +57,47 @@ $sql_legislation = mysqli_query($link, $str_legislation);
 // print initial list of legislation
 //$row_legislation = mysqli_fetch_assoc($sql_legislation1);
 //echo $str_legislation;
-
 echo "<table class=\"bottomtable\">";
-if ($_SESSION["user"]) { 
-echo "<tr bgcolor=lightblue ><td>Legislation</td><td style=\"width:30px;\">Bill #</td><td style=\"width:50px;\">Date<td>Description</td><td align=right colspan=4><a href='edit_legislation.php?add=T'>Add Legislation</a></td></tr>";
+if ( $_SESSION["root"]) { 
+echo "<tr><td><form action=\"publish.php\" method=POST><input type=\"submit\" value=\"Apply Published states\"></td></tr>";
+echo "<input type=\"hidden\" name=\"issue_id_save\" value=\"" . $_GET["issue_id"] . "\">";
 }
-//echo "<th bgcolor=lightblue>Bill</th><th bgcolor=pink>Date</th><th bgcolor=green>Description</th>";
+
+if ($_SESSION["user"] || $_SESSION["root"]) { 
+echo "<tr bgcolor=lightblue ><td >Published</td><td>Legislation</td><td style=\"width:30px;\">Bill #</td><td style=\"width:50px;\">Date<td>Description</td><td align=right colspan=4><a href='edit_legislation.php?add=T'>Add Legislation</a></td></tr>";
+}
+ else {
+echo "<tr bgcolor=lightblue ><td>Legislation</td><td style=\"width:30px;\">Bill #</td><td style=\"width:50px;\">Date<td>Description</td><td align=right colspan=4></td></tr>";
+
+
+}
 while($row_legislation = mysqli_fetch_assoc($sql_legislation)){
-//"edit_legislation.php?id=".$row_legislation["id"];
-echo "<tr><td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legislation_id=".$row_legislation["id"]."\">".$row_legislation["legislation_name"]."</a></td>";
+
+
+if ( $_SESSION["root"]) { 
+echo "<tr><td>Published:<br><input type=\"radio\"  name=\"published".$row_legislation["id"]. "\" value=\"true\" " .  ($row_legislation["published"]  ? "checked ":"") . ">Yes<input type=\"radio\" name=\"published".$row_legislation["id"]."\" value=\"false\"" .  (!$row_legislation["published"]  ? "checked ":"") . ">No</td><td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legislation_id=".$row_legislation["id"]."\">".$row_legislation["legislation_name"]."</a></td>";
+}
+if ( 
+(!$_SESSION["user"] && !$_SESSION["root"] && $row_legislation["published"]) // published, non special user
+|| ($_SESSION["user"] && !$SESSION["root"]) ) // user but not root
+{
+
+if ($_SESSION["user"] && !$_SESSION["root"]) {
+ echo "<tr><td>" . ($row_legislation["published"] ? "Y" : "N" ) . "</td>" ;
+echo "<td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legislation_id=".$row_legislation["id"]."\">".$row_legislation["legislation_name"]."</a></td>";
+} 
+if (!$_SESSION["user"]) {
+echo "<tr>";
+echo "<td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legislation_id=".$row_legislation["id"]."\">".$row_legislation["legislation_name"]."</a></td>";
+}
+
+
+
+
 echo "<td valign=top>".$row_legislation["bill_number"]."</td><td valign=top  bgcolor=pink >".$row_legislation["legislation_date"]."</td>";
-echo "<td valign=top  bgcolor=lightgreen>".$row_legislation["description"]."</td>";
+echo "<td valign=top  bgcolor=lightgreen>".$row_legislation["description"]."</td>";}
+
+
 if ($_SESSION["user"]) { 
 echo "<td valign=top  bgcolor=lightgreen><a href='edit_legislation.php?legislation_id=".$row_legislation["id"]."'>edit</a>&nbsp;&nbsp;&nbsp;<a href='delete_legislation.php?legislation_id=".$row_legislation["id"]."'>delete</a></td>";
 
@@ -77,7 +107,7 @@ echo "</tr><tr><td colspan=4 valign=top bgcolor=papayawhip>".$row_legislation["s
 }
 
 }
-echo "</table>";
+echo "</form></table>";
 mysqli_free_result($sql_legislation);
 
 // Get and print legislation again in table

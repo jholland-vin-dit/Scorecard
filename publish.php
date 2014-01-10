@@ -20,17 +20,27 @@
 <?php 
 session_start();
 
-$page_name="logout.php";
-$page_title = "Voter Scorecard Logout";
+$page_name="publish.php";
+$page_title = "Voter Scorecard Publish Action";
 ?>
-<?php 
+<?php  include 'header.php'; // need this for db connection ?>
+<?php  $submitted_username = '';
+    echo "hello";
+    if(!empty($_POST))
+    {
+ print_r($_POST); 
 
- include 'header.php'; 
-  unset($_SESSION['user']);
-  unset($_SESSION['root']);            
-    
+foreach ($_POST as $key => $value){
+	if ( ereg('published.*',$key)) {
+	echo "<br>" . $key . "<br>" . $value . "<br>";
+
+	$query =  "UPDATE `tbl_legislation` set published = " . $value . " where id=" . substr($key,9);
+
+	echo $query;
+	    $sql_query = mysqli_query($link, $query);
+	}
+}
+}
+    header('Location: legislation_listing.php?issue_id=' . $_POST["issue_id_save"]) ;
 ?>
-<h1>Logout</h1>
-<h3>You have logged out from the Scorecard. </h3>
 
-</html>
