@@ -1,6 +1,5 @@
  /*
- This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holla
-nd.
+ This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holland.
 
     Scorecard is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -93,7 +92,7 @@ table.bottomtable {
 	margin: 0 auto;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 9pt;
-  color: #033333;
+  color: #000000;
 	font-weight: normal;
 	text-align: left;
 	padding-top:.1em;
@@ -117,7 +116,7 @@ td.bottomtable {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 9 pt;
  	text-align: left;
-  color: #033333;
+  color: #000000;
   font-weight: normal;
   background-color: #FFCC99;
 	vertical-align:top;
@@ -216,7 +215,7 @@ li{
 	}  
  
 H3{color:brown;font-size:12pt;font-family:Verdana, Arial, Helvetica, sans-serif; text-align:center;}
-TH{color:blue;font-size:8pt;font-family:Verdana, Arial, Helvetica, sans-serif;}
+TH{color:black;font-size:8pt;font-family:Verdana, Arial, Helvetica, sans-serif;}
 A:Link{color:Brown;font-size:9pt;font-family:Verdana, Arial, Helvetica, sans-serif;font-weight:normal; 
 text-decoration: none;} 
 A:Visited{color:Brown;font-size:9pt;font-family:Verdana, Arial, Helvetica, sans-serif;

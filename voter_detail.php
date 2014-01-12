@@ -18,7 +18,7 @@ nd.
 
 */
 ?>
-<?php $page_title="enviro listing page--bill detail";
+<?php $page_title="County Council Scorecard";
 session_start()
 ?>
 <?php include 'connection_string.php'; ?>
@@ -56,7 +56,8 @@ $str_good_number .= " from mtx_legis_party_desired_vote_types mtx ";
 $str_good_number .= " where mtx.legislation_id = legislation.id";
 $str_good_number .= " and mtx.desired_vote_type_id =votes.vote_type_id ";
 $str_good_number .= " and mtx.party_id=3)";
-$str_good_number .= " AND votes.voter_id=".$voter_id.";";
+$str_good_number .= " AND votes.voter_id=".$voter_id;
+$str_good_number .= " AND legislation.published=1;";
 
     $sql_good_number  = mysqli_query($link, $str_good_number);
     $good_number_count = mysqli_num_rows($sql_good_number);
@@ -70,19 +71,19 @@ $str_all_number .= " and exists (select *";
 $str_all_number .= " from mtx_legis_party_desired_vote_types mtx ";
 $str_all_number .= " where mtx.legislation_id = legislation.id";
 $str_all_number .= " and mtx.party_id=3)";
-$str_all_number .= " AND votes.voter_id=".$voter_id.";";
-
+$str_all_number .= " AND votes.voter_id=".$voter_id;
+$str_all_number .= " AND legislation.published=1;";
     $sql_all_number  = mysqli_query($link, $str_all_number);
     $all_number_count = mysqli_num_rows($sql_all_number);
     $row_all_number = mysqli_fetch_assoc($sql_all_number);
     echo "<tr><td><div style=\"font-family:sans;font-size:small;\">";
-  echo "<span style=\"color:red;font-weight:bold;\">".$row_voter["first_name"]." ".$row_voter["last_name"]."</span>&nbsp;&nbsp;";
-    echo $row_voter["party_name"].", " . $row_voter["district"] . " " 
+  echo "<span style=\"font-weight:bold\">".$row_voter["first_name"]." ".$row_voter["last_name"]."</span>&nbsp;&nbsp;";
+    echo $row_voter["party_name"].", " . $row_voter["district"] . " " ;
     
-    .$row_voter["body_name"] . "&nbsp;&nbsp;";
 
 
-echo "<span style=\"color:red;font-weight:bold;\">Rating: " . $row_good_number["thecount"] . "/" . $row_all_number["thecount"] ;
+
+echo "<span style=\"font-weight:bold;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rating: " . $row_good_number["thecount"] . "/" . $row_all_number["thecount"] ;
   echo "</span></div></td></tr>";
 
 
@@ -98,7 +99,8 @@ $str_bill = "SELECT votes.vote_type_id, mtx.desired_vote_type_id, vote_types.vot
     $str_bill .= "and vote_types.id=votes.vote_type_id ";
     $str_bill .= "and  mtx.legislation_id=legislation.id  ";
     $str_bill .= "AND votes.voter_id =" . $voter_id. " "; 
-    $str_bill .= "order by legislation_date";
+    $str_bill .= " AND legislation.published=1 ";
+    $str_bill .= " order by legislation_date";
     $str_bill .= ";";
 
 
@@ -113,7 +115,7 @@ $str_bill = "SELECT votes.vote_type_id, mtx.desired_vote_type_id, vote_types.vot
 $alternate_shade = false;
 
     echo "<table class=bottomtable>\n";
-  echo "<tr><th style=\"width:100px;\">Date</th><th style=\"width:200px;\">Bill</th><th>Bill Number</th><th>Description</th><th>Vote</th></tr>";
+  echo "<tr><th style=\"width:200px;\">Bill</th><th>Description</th><th>Member Vote</th><th>Bill Number</th><th style=\"width:100px;\">Date</th></tr>";
     while($row_votes = mysqli_fetch_assoc($sql_bill)){
      if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
            $span = " style=\"background-color:" . $bgcolor1 . ";\"";
@@ -124,7 +126,7 @@ $alternate_shade = false;
   
   $vote_text = "<td ".$span. ">".$row_votes["vote"]."</td>";
   $name_text = "<a href='bill_detail.php?legislation_id=".$row_votes["legislation_id"]."'>".$row_votes["legislation_name"]."</a>";
-    $number_text = "<a href='bill_detail.php?legislation_id=".$row_votes["legislation_id"]."'>".$row_votes["bill_number"]."</a>";
+    $number_text = $row_votes["bill_number"];
   if ($alternate_shade) {
   echo "<tr>" ;
   }
@@ -132,14 +134,12 @@ $alternate_shade = false;
   echo  "<tr style=\"background-color:#99CC99\">";
 }
   $alternate_shade = !$alternate_shade;
-echo "<td>" . $row_votes["legislation_date"] . "</td><td>";
+echo "<td>";
 
-  echo $name_text."</td><td>".$number_text."</td><td>" . $row_votes["description"]."</td>\n";
-  echo $vote_text;
+  echo $name_text."</td><td>" . $row_votes["description"]."</td>\n";
+  echo  $vote_text  . "<td>".$number_text."</td><td>" . $row_votes["legislation_date"] . "</td>";
 
-
-
-  echo "</td></tr>\n";
+  echo "       </tr>\n";
     }  // while votes
     echo "</table>\n";
     /* free result set */

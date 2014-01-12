@@ -54,7 +54,7 @@ selectObj.form.submit();
 <?php  include 'common.php'; ?>
 
 
-<table class="bottomtable"><tr><td width="65%">
+<table class="bottomtable"  ><tr><td width="100%" align=\"center\">
   <?php //include 'http://192.168.61.98/Scorecard/voters_ratings.php' . '?issue_id=0&heading_clause=' . urlencode($heading_clause)   ; 
  
  
@@ -76,6 +76,7 @@ $str_ratings .= "left outer join mtx_legis_party_desired_vote_types mtx on legis
 $str_ratings .= "left join mtx_voters_bodies voters_bodies on voters_bodies.voter_id=voters.id  ";
 $str_ratings .= "where voters_bodies.year=" . $body_year ;
 $str_ratings .= " and votes.vote_type_id <> -1" ; // N/A's don't count
+$str_ratings .= " and legislation.published=1" ; 
 
 if ($issue_id <> 0) {
 $str_ratings .= " and legislation.issue_id = " . $issue_id ;
@@ -91,18 +92,23 @@ $str_ratings .= "subquery order by percentage desc, last_name,first_name ; ";
 $sql_ratings = mysqli_query($link, $str_ratings);
 
 $ratings_count = mysqli_num_rows($sql_ratings);
-echo "<table class=\"bottomtablenowidth\"><tr><td>";
-echo "<font size=4>Legislators and their ratings ";
-echo $_GET["heading_clause"]; 
-echo "</font></td><tr></table>";
+//echo "<table class=\"bottomtablenowidth\">
+
 
 // print list of voters and their votes
 // taking it out of a table so it can be used in other page better
-echo "<table  class=\"bottomtablenowidth\">";
+echo "<table class=\"bottomtablenowidth\" >";
+echo "<tr><td colspan=3>";
+echo "<font size=4><i>Click on a name to see voting record:</i>";
+echo $_GET["heading_clause"]; 
+echo "</font></td><tr>";
+
 while($row_ratings = mysqli_fetch_assoc($sql_ratings)){
-  echo "<tr><td><a href=\"voter_detail.php?voter_id=".$row_ratings["voter_id"]."\">" . $row_ratings["first_name"] . " " . $row_ratings["last_name"] .  ", " . $row_ratings["district"] . ", " .  $row_ratings["party_name"] .
- "</a></td><td>"
-    . $row_ratings["percentage"] . "% </td><td>" ;
+  echo "<tr><td><a href=\"voter_detail.php?voter_id=".$row_ratings["voter_id"]."\">" .
+"<span style=\"font-size:large;\">" .
+ $row_ratings["first_name"] . " " . $row_ratings["last_name"] .  ", " . $row_ratings["district"] . ", " .  $row_ratings["party_name"] .
+ "</a></span></td><td align=\"right\">&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"font-weight:900;font-size:large;\">"
+    . $row_ratings["percentage"] . "%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></td><td>" ;
   $TOTAL_CELLS=100;
   $num_of_green_cells = intval($TOTAL_CELLS * $row_ratings["percentage"]/100);
   echo "<table style=\"border-collapse:collapse;\">";
@@ -122,7 +128,9 @@ echo "</table>\n";
  
   ?>
 </td>
-<td width="35%"> 
+</tr>
+<tr>
+<td width="20%"> 
     <?php 
         /* check connection */
       if (mysqli_connect_errno()) {
@@ -136,7 +144,7 @@ echo "</table>\n";
 " inner join tbl_big_issues big_issues on issues.big_issue_id=big_issues.id " .
 " order by issues.title desc ;";
       echo "<table class=\"bottomtablenowidth\">\n";
-      echo "<tr><td><font size=\"4\">All Issues</font></td></tr>\n";
+      echo "<tr><td><font size=\"4\"><i>Click on an issue to see individual bills:</i></font></td></tr>\n";
     $current_color=$color1;
     $color_toggle=true;
 
@@ -160,7 +168,7 @@ echo "</table>\n";
         if ($sql_legislation = mysqli_query($link, $str_legislation)){
                echo "<td valign=top bgcolor=".$current_color."><font size=4><b>\n";
             echo "<a href=\"legislation_listing.php?issue_id=".$row_issues["issue_id"]."\">\n";
-            echo $row_issues["title"]."</a></b></font>\n";
+            echo "<span style=\"font-size:larger\";>" .$row_issues["title"]."</span></a></b></font>\n";
             echo "</td></tr>\n";
         } // if sql_legislation
        } //while
@@ -174,8 +182,9 @@ echo "</table>\n";
 
     ?>
 
-</td></tr></table>
-
-
+</td></tr><tr><td>
+Published by <a href="http://www.montgomerycountygreenparty.org">Montgomery County Green Party</a> </td><td align="right" width="200px">
+<a href="about.php">About&nbsp;this&nbsp;scorecard</a>
+</tr></td></table>
 </body>
 </html>

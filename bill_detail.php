@@ -55,24 +55,10 @@ $row_body = mysqli_fetch_assoc($sql_bill);
 <?php echo $row_body["issue_title"] ?></a></span>
 </td></tr></table>
 <table class=bottomtable>
-<tr><td><span style="font-weight:bold;">
- Bill:
+<tr><td><span style="font-size:large;">
+
 <?php 
 echo $row_body["legislation_name"];
-?>
-</span>
-</td></tr>
-<tr><td><span style="font-weight:bold;">
- Bill #:
-<?php 
-echo $row_body["bill_number"];
-?>
-</span>
-</td></tr>
-<tr><td><span style="font-weight:bold;">
- Voting Body:
-<?php 
-echo $row_body["voting_body_name"];
 ?>
 </span>
 </td></tr>
@@ -82,20 +68,24 @@ echo $row_body["voting_body_name"];
 
 echo "<table class=bottomtable>";
 echo "<tr>
-<th bgcolor=\"orange\">Description</th>
-<th bgcolor=\"orange\" style=\"width:100px;\">Date</th>
-<th bgcolor=\"orange\">Desired Vote</th></tr>\n";
+<th>Description</th>
+</tr>";
+
+
 
 echo "<tr><td>"
-.$row_body["description"]
-."</td><td>"
-.$row_body["legislation_date"]
-."</td><td>"
-.$row_body["vote"];
+.$row_body["description"];
+
+
 echo "</td></tr>";
+echo "</table><table class=bottomtable><tr>";
+echo "<td><span style=\"font-size:large;\">Desired Vote: &nbsp;&nbsp;</span>"  .
+"<span style=\"color:green;font-size:large;\">" .
+
+$row_body["vote"] . "</span></td></tr>";
 echo "</table><table class=bottomtable>";
 echo "<tr>";
-echo " <th bgcolor=\"orange\">Synopsis</th>";
+echo " <th>Further Information and Contacts</th>";
 echo "</tr>\n";
 echo "<tr><td>"
 .$row_body["synopsis"]
@@ -125,24 +115,27 @@ $str_votes .= ";";
 $sql_votes = mysqli_query($link, $str_votes);
 $votes_count = mysqli_num_rows($sql_votes);
 //$row_votes = mysqli_fetch_assoc($sql_votes);  
-
-echo "<table class=bottomtable>";
+echo "<table class=\"bottomtable\"><tr><td align=\"center\">";
+echo "<table width=\"50%\" class=\"bottomtablenowidth\">";
 echo "<tr><th bgcolor=\"lightblue\">Council Member</th><th bgcolor=\"lightblue\">Vote</th></tr>\n";
 // print list of voters and their votes
 
 while($row_votes = mysqli_fetch_assoc($sql_votes)){
 
-   $voter_link = "<a style=\"color:white;\" href=\"voter_detail.php?voter_id=".$row_votes["voter_id"]."\">".$row_votes["first_name"]." ".$row_votes["last_name"].  ", " . $row_votes["district"] . ", " .  $row_votes["party_name"] .    "</a>";
-  if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
-           $spancolor ="background-color:" . $bgcolor1 . ";color:white;";
-  } else {
-           $spancolor ="background-color:" . $bgcolor2 . ";color:white;";
-  }
+   $voter_link = "<a  href=\"voter_detail.php?voter_id=".$row_votes["voter_id"]."\"><span style=\"font-size:larger;\">".$row_votes["first_name"]." ".$row_votes["last_name"].  ", " . $row_votes["district"] . ", " .  $row_votes["party_name"] .    "</span></a>";
+   
+   if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
+   $styletext="style=\"font-size:larger;color:green;\"";
+   } else {
+   $styletext="style=\"font-size:larger;\"";
+}
 
-   $vote_text = "<td style=\"".$spancolor."\" >".$row_votes["vote"]."</td>";
+
+
+   $vote_text = "<td " .$styletext . " >".$row_votes["vote"]."</td>";
 
       echo "<tr>";
-                        echo "<td style=\"" .$spancolor. "\" >".$voter_link."</td>";
+                        echo "<td>".$voter_link."</td>";
 
       echo $vote_text;
       echo "</tr>\n";
@@ -155,6 +148,13 @@ echo "<tr><td colspan=3><hr></td></tr>";
   //mysqli_close() // do this for tidyness
 // now to leave PHP and go back to straight HTML
 ?>
+</table>
+</td></tr>
+<tr><td> Bill #:
+<?php echo $row_body["bill_number"];?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Voting Body:
+<?php echo $row_body["voting_body_name"]; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date:
+<?php echo $row_body["legislation_date"] ?></td></tr>
+
 </table>
 </body>
 </html>

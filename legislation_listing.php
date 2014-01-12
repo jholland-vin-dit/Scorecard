@@ -64,10 +64,10 @@ echo "<input type=\"hidden\" name=\"issue_id_save\" value=\"" . $_GET["issue_id"
 }
 
 if ($_SESSION["user"] || $_SESSION["root"]) { 
-echo "<tr bgcolor=lightblue ><td >Published</td><td>Legislation</td><td style=\"width:30px;\">Bill #</td><td style=\"width:50px;\">Date<td>Description</td><td align=right colspan=4><a href='edit_legislation.php?add=T'>Add Legislation</a></td></tr>";
+echo "<tr bgcolor=lightblue ><td >Published</td><td>Click on Bill Title to see votes</td><td style=\"width:30px;\">Bill #</td><td style=\"width:50px;\">Date<td>Description</td><td align=right colspan=4><a href='edit_legislation.php?add=T'>Add Legislation</a></td></tr>";
 }
  else {
-echo "<tr bgcolor=lightblue ><td>Legislation</td><td style=\"width:30px;\">Bill #</td><td style=\"width:50px;\">Date<td>Description</td><td align=right colspan=4></td></tr>";
+echo "<tr bgcolor=lightblue ><td>Click on Bill Title to see votes</td><td style=\"width:30px;\">Bill #</td><td style=\"width:50px;\">Date<td>Description</td><td align=right colspan=4></td></tr>";
 
 
 }
@@ -94,7 +94,7 @@ echo "<td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legis
 
 
 
-echo "<td valign=top>".$row_legislation["bill_number"]."</td><td valign=top  bgcolor=pink >".$row_legislation["legislation_date"]."</td>";
+echo "<td valign=top>".$row_legislation["bill_number"]."</td><td valign=top   >".$row_legislation["legislation_date"]."</td>";
 echo "<td valign=top  bgcolor=lightgreen>".$row_legislation["description"]."</td>";}
 
 

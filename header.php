@@ -65,21 +65,26 @@ if ($sql_body = mysqli_query($link, $str_body)) {
 $row_body = mysqli_fetch_assoc($sql_body);
 
 echo "<table style=\"background-color:198a1d;\"  width=840 cellpadding=0 cellspacing=0 border=0 align=center>";
-echo "<tr><td><a href='index.php'><img style=\"width:50%;height:50%;\" src='images/header.gif' alt='Green Party Scorecard'></a></td></tr>";
-echo "<tr><td>";
-echo $row_body["name"]."/".$body_year ;
+echo "<tr><td align=\"left\"><img  style=\"width:8%;height:8%;position:absolute;z-index:2;\" src=\"images/mocologo.gif\">";
+echo "</td></tr><tr><td align=\"center\"><span style=\"color:d5d761;font-size:large;font-weight:200;\">Green Party of Montgomery County, Maryland</span></td></tr>";
+
+
+echo "<tr><td align=\"center\">";
+echo "<span style=\"font-weight:200;font-size:x-large;\">";
+echo $row_body["name"] ;
+echo "</span>";
 echo "</td>" ;
 echo "</tr>";
 if ($page_name <> "index.php") {
 echo "<tr><td>";
-echo "<a style=\"color:yellow;\" href=\"index.php\">Return to front page</a>";
+echo "<a style=\"font-weight:normal;\"	 href=\"index.php\">Return to front page</a>";
 echo "</td></tr>"; 
 
 }
 
 echo "<tr><td><div style=\"height:6px;background-color:198a1d;\">&nbsp;</div></td></tr>"; 
 if ($_SESSION['user'])  {
-echo "<tr><td><a href=\"login.php\">Login/Logout page</a></td></tr>";
+echo "<tr><td><a href=\"login.php\"><span style=\"color:white;\">Login/Logout page</span></a></td></tr>";
 }
 echo "</table>";
 
