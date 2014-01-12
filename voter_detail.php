@@ -44,9 +44,9 @@ session_start()
     $voter_count = mysqli_num_rows($sql_voter);
 
     $row_voter = mysqli_fetch_assoc($sql_voter);
-	echo "<table class=bottomtable>";
+  echo "<table class=bottomtable>";
 
-	
+  
     // get and print rating number - good votes first
 $str_good_number = "SELECT count(*) thecount ";
 $str_good_number .= " FROM tbl_votes votes, tbl_legislation legislation ";
@@ -75,15 +75,15 @@ $str_all_number .= " AND votes.voter_id=".$voter_id.";";
     $sql_all_number  = mysqli_query($link, $str_all_number);
     $all_number_count = mysqli_num_rows($sql_all_number);
     $row_all_number = mysqli_fetch_assoc($sql_all_number);
-    echo "<div style=\"font-family:sans;font-size:small;\">";
-	echo "<span style=\"color:red;font-weight:bold;\">".$row_voter["first_name"]." ".$row_voter["last_name"]."</span>&nbsp;&nbsp;";
+    echo "<tr><td><div style=\"font-family:sans;font-size:small;\">";
+  echo "<span style=\"color:red;font-weight:bold;\">".$row_voter["first_name"]." ".$row_voter["last_name"]."</span>&nbsp;&nbsp;";
     echo $row_voter["party_name"].", " . $row_voter["district"] . " " 
     
     .$row_voter["body_name"] . "&nbsp;&nbsp;";
 
 
 echo "<span style=\"color:red;font-weight:bold;\">Rating: " . $row_good_number["thecount"] . "/" . $row_all_number["thecount"] ;
-echo "</span></div>";
+  echo "</span></div></td></tr>";
 
 
 
@@ -113,39 +113,39 @@ $str_bill = "SELECT votes.vote_type_id, mtx.desired_vote_type_id, vote_types.vot
 $alternate_shade = false;
 
     echo "<table class=bottomtable>\n";
-	echo "<tr><th style=\"width:100px;\">Date</th><th style=\"width:200px;\">Bill</th><th>Bill Number</th><th>Description</th><th>Vote</th></tr>";
+  echo "<tr><th style=\"width:100px;\">Date</th><th style=\"width:200px;\">Bill</th><th>Bill Number</th><th>Description</th><th>Vote</th></tr>";
     while($row_votes = mysqli_fetch_assoc($sql_bill)){
-   	if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
+     if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
            $span = " style=\"background-color:" . $bgcolor1 . ";\"";
-	} else {
+  } else {
            $span=" style=\"background-color:" . $bgcolor2 . ";\"";
-	}
-	$span = str_replace("#","",$span);
-	
-	$vote_text = "<td ".$span. ">".$row_votes["vote"]."</td>";
-	$name_text = "<a href='bill_detail.php?legislation_id=".$row_votes["legislation_id"]."'>".$row_votes["legislation_name"]."</a>";
-		$number_text = "<a href='bill_detail.php?legislation_id=".$row_votes["legislation_id"]."'>".$row_votes["bill_number"]."</a>";
-	if ($alternate_shade) {
-	echo "<tr>" ;
-	}
-	else {
-	echo  "<tr style=\"background-color:#99CC99\">";
+  }
+  $span = str_replace("#","",$span);
+  
+  $vote_text = "<td ".$span. ">".$row_votes["vote"]."</td>";
+  $name_text = "<a href='bill_detail.php?legislation_id=".$row_votes["legislation_id"]."'>".$row_votes["legislation_name"]."</a>";
+    $number_text = "<a href='bill_detail.php?legislation_id=".$row_votes["legislation_id"]."'>".$row_votes["bill_number"]."</a>";
+  if ($alternate_shade) {
+  echo "<tr>" ;
+  }
+  else {
+  echo  "<tr style=\"background-color:#99CC99\">";
 }
-	$alternate_shade = !$alternate_shade;
+  $alternate_shade = !$alternate_shade;
 echo "<td>" . $row_votes["legislation_date"] . "</td><td>";
 
-	echo $name_text."</td><td>".$number_text."</td><td>" . $row_votes["description"]."</td>\n";
-	echo $vote_text;
+  echo $name_text."</td><td>".$number_text."</td><td>" . $row_votes["description"]."</td>\n";
+  echo $vote_text;
 
 
 
-	echo "</td></tr>\n";
+  echo "</td></tr>\n";
     }  // while votes
     echo "</table>\n";
     /* free result set */
     mysqli_free_result($sql_voter);
     mysqli_free_result($sql_bill);
-    mysqli_close(); // do this for tidyness
+  //mysqli_close(); // do this for tidyness
 
 
     // now to leave PHP and go back to straight HTML

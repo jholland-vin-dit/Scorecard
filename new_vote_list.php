@@ -86,23 +86,23 @@ while($row_votes = mysqli_fetch_assoc($sql_votes)) {
     echo "\n<tr><td>" . "<a href=\"bill_detail.php?id=" . $row_votes["legislation_id"] . "&body_id=" . $body_id . "&body_year=" . $body_year . "&issue_id=". $row_votes["issue_id"] . "\">";
 
 echo  $row_votes["legislation_name"] 
-	. "</a></td><td>" . $row_votes["legislation_date"] . "</td>";
+  . "</a></td><td>" . $row_votes["legislation_date"] . "</td>";
 echo "<td><a href=\"legislation_listing.php?issue_id=" . $row_votes["issue_id"] 
   . "\">" . $row_votes["issue_title"] . "</a></td>";
   }
 
-	if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
-	   $vote_is_desired  = TRUE;
+  if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
+     $vote_is_desired  = TRUE;
            $spancolor ="bgcolor=\"lightgreen\"";
-	} else {
-	   $vote_is_desired = FALSE;
-	}
-	if ($vote_is_desired){
-	   $vote_text = "<td ".$spancolor." >".$row_votes["vote"]."</td>";
-	} else {
-	  $vote_text = "<td>".$row_votes["vote"]."</td>";
-	}
-	echo $vote_text;
+  } else {
+     $vote_is_desired = FALSE;
+  }
+  if ($vote_is_desired){
+     $vote_text = "<td ".$spancolor." >".$row_votes["vote"]."</td>";
+  } else {
+    $vote_text = "<td>".$row_votes["vote"]."</td>";
+  }
+  echo $vote_text;
 
 
 
@@ -116,16 +116,16 @@ echo "</tr></table>";
 
 
 $votes_count = mysqli_num_rows($sql_votes);
-//$row_votes = mysqli_fetch_assoc($sql_votes);	
+//$row_votes = mysqli_fetch_assoc($sql_votes);  
 //echo "<br>votes_count: ".$votes_count;
 
 //echo "<br>before while:";
 
-//if ($sql_votes = mysqli_query($link, $str_votes )) 	{}
+//if ($sql_votes = mysqli_query($link, $str_votes ))   {}
 echo "<table  width=380 cdllpadding=0 cellspacing=0 border =0>";
 echo "<th bgcolor=lightblue>&nbsp;</th>";
 while($row_legislation = mysqli_fetch_assoc($sql_legislation)){
-	echo "<th bgcolor=lightblue>".$row_legislation["legislation_name"]."<br>".$row_legislation["legislation_date"]."</th>";
+  echo "<th bgcolor=lightblue>".$row_legislation["legislation_name"]."<br>".$row_legislation["legislation_date"]."</th>";
 }
 echo "</tr>";
 
@@ -138,40 +138,40 @@ while($row_votes = mysqli_fetch_assoc($sql_votes)){
 //echo "<tr><td>id: ".$row_votes["vote_type_id"]."</td></tr>";
 
 // I commented the next line and added the line above on 114 to see if I could get it to work in an while loop. . .
-	//if(FALSE) {  if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
-	if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
-	   $vote_is_desired  = TRUE;
+  //if(FALSE) {  if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
+  if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
+     $vote_is_desired  = TRUE;
            $spancolor ="bgcolor=\"lightgreen\"";
-	} else {
-	   $vote_is_desired = FALSE;
-	}
-	if ($vote_is_desired){
-	   $vote_text = "<td ".$spancolor." >".$row_votes["vote"]."</td>";
+  } else {
+     $vote_is_desired = FALSE;
+  }
+  if ($vote_is_desired){
+     $vote_text = "<td ".$spancolor." >".$row_votes["vote"]."</td>";
 
 
-	} else {
-	    $vote_text = "<td>".$row_votes["vote"]."</td>"; 
+  } else {
+      $vote_text = "<td>".$row_votes["vote"]."</td>"; 
 
-	}
-		if ($kounter==1){ // print first time of set
-			echo "<tr>";
-			echo "<td valign=top><a href=\"voter_detail.php?id=".$row_votes["voter_id"]."\">".$row_votes["first_name"]." ".$row_votes["last_name"]."</a></td>";
-			echo $vote_text;
-		}else{  // bigger than 1 or reset
-			echo $vote_text;
-		}
-		++$kounter;  // increment either way
-		if ($kounter > $legislation_count){ // end of row
-			echo "</tr>";
-			$kounter=1;
-		} 
+  }
+    if ($kounter==1){ // print first time of set
+      echo "<tr>";
+      echo "<td valign=top><a href=\"voter_detail.php?id=".$row_votes["voter_id"]."\">".$row_votes["first_name"]." ".$row_votes["last_name"]."</a></td>";
+      echo $vote_text;
+    }else{  // bigger than 1 or reset
+      echo $vote_text;
+    }
+    ++$kounter;  // increment either way
+    if ($kounter > $legislation_count){ // end of row
+      echo "</tr>";
+      $kounter=1;
+    } 
 }  // while votes
 echo "<tr><td colspan=3><hr></td></tr>";
 
     /* free result set */
 mysqli_free_result($sql_votes);
 mysqli_free_result($sql_legislation);
-mysqli_close(); // do this for tidyness
+  //mysqli_close(); // do this for tidyness
 ?>
 </body>
 </html>

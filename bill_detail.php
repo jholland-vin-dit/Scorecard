@@ -124,7 +124,7 @@ $str_votes .= ";";
 
 $sql_votes = mysqli_query($link, $str_votes);
 $votes_count = mysqli_num_rows($sql_votes);
-//$row_votes = mysqli_fetch_assoc($sql_votes);	
+//$row_votes = mysqli_fetch_assoc($sql_votes);  
 
 echo "<table class=bottomtable>";
 echo "<tr><th bgcolor=\"lightblue\">Council Member</th><th bgcolor=\"lightblue\">Vote</th></tr>\n";
@@ -133,26 +133,26 @@ echo "<tr><th bgcolor=\"lightblue\">Council Member</th><th bgcolor=\"lightblue\"
 while($row_votes = mysqli_fetch_assoc($sql_votes)){
 
    $voter_link = "<a style=\"color:white;\" href=\"voter_detail.php?voter_id=".$row_votes["voter_id"]."\">".$row_votes["first_name"]." ".$row_votes["last_name"].  ", " . $row_votes["district"] . ", " .  $row_votes["party_name"] .    "</a>";
-	if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
+  if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
            $spancolor ="background-color:" . $bgcolor1 . ";color:white;";
-	} else {
+  } else {
            $spancolor ="background-color:" . $bgcolor2 . ";color:white;";
-	}
+  }
 
    $vote_text = "<td style=\"".$spancolor."\" >".$row_votes["vote"]."</td>";
 
-			echo "<tr>";
+      echo "<tr>";
                         echo "<td style=\"" .$spancolor. "\" >".$voter_link."</td>";
 
-			echo $vote_text;
-			echo "</tr>\n";
+      echo $vote_text;
+      echo "</tr>\n";
 
 }  // while votes
 echo "<tr><td colspan=3><hr></td></tr>";
     /* free result set */
-mysqli_free_result($sql_votes);
-mysqli_free_result($sql_legislation);
-mysqli_close() // do this for tidyness
+  //mysqli_free_result($sql_votes);
+  //mysqli_free_result($sql_legislation);
+  //mysqli_close() // do this for tidyness
 // now to leave PHP and go back to straight HTML
 ?>
 </table>
