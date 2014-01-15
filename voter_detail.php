@@ -57,6 +57,7 @@ $str_good_number .= " where mtx.legislation_id = legislation.id";
 $str_good_number .= " and mtx.desired_vote_type_id =votes.vote_type_id ";
 $str_good_number .= " and mtx.party_id=3)";
 $str_good_number .= " AND votes.voter_id=".$voter_id;
+$str_good_number .= " AND votes.vote_type_id <> -1";
 $str_good_number .= " AND legislation.published=1;";
 
     $sql_good_number  = mysqli_query($link, $str_good_number);
@@ -72,6 +73,7 @@ $str_all_number .= " from mtx_legis_party_desired_vote_types mtx ";
 $str_all_number .= " where mtx.legislation_id = legislation.id";
 $str_all_number .= " and mtx.party_id=3)";
 $str_all_number .= " AND votes.voter_id=".$voter_id;
+$str_all_number .= " AND votes.vote_type_id <> -1";
 $str_all_number .= " AND legislation.published=1;";
     $sql_all_number  = mysqli_query($link, $str_all_number);
     $all_number_count = mysqli_num_rows($sql_all_number);

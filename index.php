@@ -78,6 +78,7 @@ $str_ratings .= "where voters_bodies.year=" . $body_year ;
 $str_ratings .= " and votes.vote_type_id <> -1" ; // N/A's don't count
 $str_ratings .= " and legislation.published=1" ; 
 
+
 if ($issue_id <> 0) {
 $str_ratings .= " and legislation.issue_id = " . $issue_id ;
 }

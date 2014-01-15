@@ -94,7 +94,7 @@ echo "<tr><td>"
 
 
 echo "</table>";
-
+echo "<table class=\"bottomtable\"><tr><td>Voting Body:&nbsp;" . $row_body["voting_body_name"] . "</td></tr></table>\n";
 $str_votes= "SELECT mtx.party_id,issue_id, legislation_name,votes.legislation_id,voter_id,vote,first_name,last_name, ";
 $str_votes .= "vote_type_id,desired_vote_type_id ,tbl_parties.name party_name, voters.district district FROM tbl_legislation legislation ";
 $str_votes .= " INNER JOIN tbl_votes votes ON votes.legislation_id = legislation.id  ";

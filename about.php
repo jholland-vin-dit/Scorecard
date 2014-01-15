@@ -22,7 +22,6 @@
 $page_name="about.php";
 $page_title = "Voter Scorecard";
 ?>
-<?php include 'header.php'; ?>
 <br><br>
 <center>
 About the County Council Scorecard:<br>
