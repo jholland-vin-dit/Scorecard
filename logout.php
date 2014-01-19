@@ -30,7 +30,6 @@ $page_title = "Voter Scorecard Logout";
   unset($_SESSION['root']);            
     
 ?>
-<h1>Logout</h1>
 <h3>You have logged out from the Scorecard. </h3>
 
 </html>

@@ -53,9 +53,6 @@ $page_title = "Voter Scorecard Change Password Action";
 	    $login_ok = false;
         
             $check_password = hash('sha256', $_POST['oldpassword'] );
-//	    	    echo "<br>" . $check_password;
-//	    echo "<br>" . $row['password'];
-//	    echo "<br>" . $row['username'];	
             if($check_password === $row['password'])
             {
                 $login_ok = true;
@@ -72,15 +69,14 @@ $page_title = "Voter Scorecard Change Password Action";
         
 
 				// Execute the query against the database
-		    //		echo $query;
 				$sql_query = mysqli_query($link, $query);
 
-				echo "password changed.";
+				echo "<table class=\"bottomtablenowidth\"><tr><td><h3>password changed.</h3></td></tr></table>";
 
 
 	    }
 	    else 
-	    { print "passwords don't match";
+	    { print "<span style=\"align:center;\"><h3>passwords don't match!!</h3></span>";
 	    }
         }
         else
