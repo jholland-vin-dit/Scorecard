@@ -22,10 +22,21 @@ nd.
 session_start();
 include ("connection_string.php");
 
+if (isset($_SESSION['haderrors'])){
+	   $haderrors=1;
+	//   echo "<h1>haderrors</h1>";
+	   unset($_SESSION['haderrors']);
+	foreach ( $_SESSION as $key => $value ){
+	 //		 echo "$key : $value <br>";
+	}
+
+}
 if (isset($_SESSION["user"])) {
-if (isset($_GET["legislation_id"])){
+   if (isset($_GET["legislation_id"])){
 	$adding=false;
+
 	$text="Edit";
+		if ($haderrors){$adding=true; $text="Add";}
 	$legislation_id=$_GET["legislation_id"];
 	$_SESSION["legislation_id"]=$legislation_id;
 	// vote preference
@@ -38,7 +49,8 @@ if (isset($_GET["legislation_id"])){
 //	echo $str_legis_party_desired_vote_type."<br>";
 //	echo "legis_party_desired_vote_type_id: ".$legis_party_desired_vote_type_id;
 	$legis_party_desired_vote_type_on=true;
-}elseif($_GET["add"]='T'){
+	}
+	elseif($_GET["add"]='T'){
 	$adding=true;
 	$text="Add";
 	$legis_party_desired_vote_type_on=false;
@@ -48,8 +60,6 @@ if (isset($_GET["legislation_id"])){
 ?>
 <?php include 'header.php'; ?>
 
-<script>
-</script>
 
 <?php
 $issue_id=$_SESSION["issue_id"];
@@ -75,7 +85,8 @@ echo "<tr>";
 echo "<td><font size=5>".$text." Legislation for ".$issue."</td><td align=right><a href='index.php'>Home</a></td>";
 echo "</tr>";
 echo "</table>";
-
+echo "<input type=\"hidden\" name=\"issue\" value=\"".$issue."\">\n";
+echo "<input type=\"hidden\" name=\"issue_id\" value=\"".$issue_id."\">\n";
 echo "<table class=bottomtable>";
 echo "<form name='save_legislation' action='save_legislation.php' method=post>";
 echo "<tr>";
@@ -88,7 +99,12 @@ if(!$adding){
 	$row_legislation = mysqli_fetch_assoc($sql_legislation);
 	// echo $str_legislation;
 	$legislation_name=htmlspecialchars($row_legislation["legislation_name"], ENT_QUOTES);
+
 	$legislation_date=$row_legislation["legislation_date"];
+		if ($haderrors) {
+			   $legislation_date=$_SESSION["legislation_date"];
+			   	   unset($_SESSION["legislation_date"]);
+	   }	   
 	$bill_number=$row_legislation["bill_number"];
 	$description=$row_legislation["description"];
 	$synopsis = $row_legislation["synopsis"];
@@ -109,6 +125,19 @@ if(!$adding){
 echo"\n<td bgcolor=lightblue align=right>Green Party preferred vote: ";
 echo "\n<select name=desired_vote_type>";
 while($row_vote_types = mysqli_fetch_assoc($sql_vote_types)){
+
+
+	if ($haderrors ) {
+	//echo "HADerrors";
+	if ($_SESSION['desired_vote_type'] == $row_vote_types["id"]){
+	//echo "APSSEDtest";
+	$selected = " selected ";
+	}
+	else {
+	$selected = " ";
+	}
+
+} else 
 	if($legis_party_desired_vote_type_on){
 		if($legis_party_desired_vote_type_id==$row_vote_types["id"]){
 			$selected = " selected ";
@@ -119,31 +148,62 @@ while($row_vote_types = mysqli_fetch_assoc($sql_vote_types)){
 	echo "\n<option value=".$row_vote_types["id"]." ".$selected." >".$row_vote_types["vote"]."</option>";
 }
 echo "\n\r</select>";
+
+echo " desired type:" .$_SESSION['desired_vote_type'] . " " . $haderrors;
 echo "</td>";
 echo "</tr>";
 echo "<tr>";
 echo "<td valign=top  bgcolor=#ACFA58>";
 echo "Name: </td>"; 
 echo "<td valign=top  bgcolor=#ACFA58>";
-echo "<input size=80 maxlength=255 type=text name='legislation_name' value='".$legislation_name."'></td></tr>";
+echo "<input size=80 maxlength=255 type=text name='legislation_name' value='";
+if ($haderrors) {
+   echo $_SESSION['legislation_name'];
+   unset($_SESSION['legislation_name']);
+} else {
+echo $legislation_name;
+} 
+
+echo "'></td></tr>";
 echo "<tr>";
 echo "<td valign=top  bgcolor=#ACFA58>";
 echo "Date: </td>"; 
 echo "<td valign=top  bgcolor=#ACFA58>";
-echo "<input size=10 maxlength=10 type=text id='datepicker' name='legislation_date' value='".$legislation_date."'></td></tr>";
-echo "<tr>";
+echo "<input size=10 maxlength=10 type=text id='datepicker' name='legislation_date' value='";
+
+echo $legislation_date;
+
+
+echo "'></td></tr><tr>";
 
 echo "<td valign=top  bgcolor=#ACFA58> ";
 echo "Bill #: </td>"; 
 echo "<td valign=top  bgcolor=#ACFA58>";
-echo "<input type=\"text\" name='bill_number' length=\"14\" value=\"".$bill_number."\"></td></tr>";
-echo "<tr>";
+echo "<input type=\"text\" name='bill_number' length=\"14\" value=\"";
+
+if ($haderrors) {
+   echo $_SESSION['bill_number'];
+   unset($_SESSION['bill_number']);
+} else {
+echo $bill_number;
+}
+echo "\"></td></tr>";
 
 echo "<td valign=top  bgcolor=#ACFA58> ";
 echo "Voting Body: </td>"; 
 echo "<td valign=top  bgcolor=#ACFA58>";
 echo "<select name=voting_body>";
 while($row_voting_bodies = mysqli_fetch_assoc($sql_voting_bodies)){
+		
+	if ($haderrors )
+ {
+	if ($_SESSION['voting_body'] == $row_voting_bodies["id"]){
+	$selected = " selected ";
+	}
+	else {
+	$selected = " ";
+	}
+} else 
 		if($legis_voting_body==$row_voting_bodies["id"]){
 			$selected = " selected ";
 		}else{
@@ -155,6 +215,16 @@ while($row_voting_bodies = mysqli_fetch_assoc($sql_voting_bodies)){
 
 echo "</select>";
 
+if ($haderrors) {
+$description= $_SESSION['description'];
+   unset($_SESSION['description']);
+} 
+	
+	$synopsis = $row_legislation["synopsis"];
+if ($haderrors) {
+   $synopsis= $_SESSION['synopsis'];
+   unset($_SESSION['synopsis']);
+}
 
 
 echo "</td></tr><tr>";
@@ -166,7 +236,7 @@ echo "<textarea cols='50' rows='10' name='description'>".$description."</textare
 echo "<tr>";
 
 echo "<td valign=top  bgcolor=#ACFA58> ";
-echo "Synopsis: </td>"; 
+echo "Further Information and Contacts: </td>"; 
 echo "<td valign=top  bgcolor=#ACFA58>";
 echo "<textarea cols='50' rows='10' name='synopsis'>".$synopsis."</textarea></td></tr>";
 
@@ -191,9 +261,15 @@ if($adding){
 //			if($adding){
 		$checked = ''; //default
 
-		if ($row_vote_types["id"] == -1 ) { //signature for N/A
+		if (!$haderrors && $row_vote_types["id"] == -1 ) { //signature for N/A
 			$checked = " checked ";
+
 		}
+if ($_SESSION["VOTE" . $row_voters["id"]] == "".$row_vote_types["id"]  ) {
+
+ $checked=" checked "; 
+unset($_SESSION["VOTE" . $row_voters["id"]]);
+}
 
 				echo "\n<td>".$row_vote_types["vote"]."\n<input type=radio name=".$row_voters["id"]. $checked ." value=".$row_vote_types["id"].">\n</td>"; 
 //			}else{
@@ -219,10 +295,12 @@ if($adding){
 			if ($row_vote_types["id"]==$row_voters["vote_type_id"])
 
 { 
-$checked=" CHECKED ";
+//$checked=" CHECKED ";
 } else {
 $checked = " ";
 }
+
+
 }
 				echo "\n<td>".$row_vote_types["vote"]."\n<input type=radio name=".$row_voters["id"]." value=".$row_vote_types["id"]."  ".$checked.">\n</td>"; 
 //			}else{

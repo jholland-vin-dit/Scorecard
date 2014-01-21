@@ -48,7 +48,7 @@ $page_title = "Voter Scorecard Login";
         );
             // Execute the query against the database
 
-$sql_query = mysqli_query($link, $query);
+       $sql_query = mysqli_query($link, $query);
 
 
     $row = mysqli_fetch_assoc($sql_query);
@@ -59,7 +59,8 @@ $sql_query = mysqli_query($link, $query);
             if($check_password === $row['password'])
             {
                 $login_ok = true;
-            }
+               }
+           }
 ?>
 
 <table width="600px" class="bottomtablenowidth">
@@ -85,8 +86,9 @@ i<span
         {
             $_SESSION['user'] = $row['username'];
 	    if ($row['username'] == 'root'){
-	    $_SESSION['root'] = 'root';
-}
+                $_SESSION['root'] = 'root';
+                 }
+
 
         	echo "<table class=\"bottomtablenowidth\" style=\"border:0;\"><tr><td><span style=\"color:red;\"><h3> User \"" . $_SESSION['user'] . "\" logged in successfully. <br><br><br> Congratulations! You have logged in successfully." . 
 " To add or edit a bill, click on \"Return to front page\" in blue at the top of this screen, then choose the bill's Issue area. You will see Add Legislation button on the top right of each Issue page, and Edit at the top right of each
@@ -95,14 +97,17 @@ bill. </span>";
         }
         else
         {
-            // Tell the user they failed
-            print("<table class=\"bottomtablenowidth\" style=\"border:0;\"><td><td><h1><span style=\"color:red;\">Login Failed. </span></h1></td></tr></table>");
 
+if(!empty($_POST)){
+   // Tell the user they failed
+   
+            print("<table class=\"bottomtablenowidth\" style=\"border:0;\"><td><td><h1><span style=\"color:red;\">Login Failed. </span></h1></td></tr></table>");
+}
 if(isset($_SESSION['user']))
   unset($_SESSION['user']);
             
         }
-    }
+    
     
 ?>
 <form action="chpasswd.php" method="post">

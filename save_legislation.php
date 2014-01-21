@@ -1,7 +1,6 @@
 <?php
  /*
- This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holla
-nd.
+ This file is part of Scorecard, Copyright 2013-2014 Dan Robinson and John Holland.
 
     Scorecard is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -21,11 +20,23 @@ nd.
 <?php
 session_start();
 ?>
-<!--?php include 'list_sessions.php'; ?-->
 <?php
-	foreach ( $_POST as $key => $value ){
-	 		 echo "$key : $value <br>";
-	}
+
+
+
+
+//foreach ( $_POST as $key => $value ){
+//	 echo "$key : $value <br>";
+//}
+foreach ( $_POST as $key =>$value ){
+	// put values in session to redisplay later
+	if (ereg("^[0-9]+$",$key)){
+		 $_SESSION["VOTE".$key] = $value;
+ 	 } else {
+	 	 $_SESSION[$key] = $value;
+	 }
+}
+//echo "after foreach";
 include ("connection_string.php");
 $body_id=$_SESSION["body_id"];
 $body_year=$_SESSION["body_year"];
@@ -51,12 +62,17 @@ $desired_vote_type_id=$_POST["desired_vote_type"];
 
 
 //date should be YYYY-MM-DD
-
+//	foreach ( $_SESSION as $key => $value ){
+//	 		 echo "$key : $value <br>";
+//	}
+//	foreach ( $_POST as $key => $value ){
+//	 		 echo " POST $key : $value <br>";
+//	}
 $year = substr($legislation_date,0,4);
 $month = substr($legislation_date,5,2);
 $day = substr($legislation_date,8,2);
 
-echo "$year   $month    $day";
+//echo "$year   $month    $day";
 
 $gooddate = true;
 $errors=false;    
@@ -66,24 +82,18 @@ if (is_numeric($year) && is_numeric($month) && is_numeric($day)) {
 	if (!checkdate($month,$day,$year)) {	
 		$gooddate = false;
 		$errormsgs .= "invalid date";
-}
+		}
 } else {
 	$gooddate = false;
 	$errormsgs .= "non-numeric date";
 }
 
 if (!$gooddate) {
-	$errors = true;
-}
+   $errors = true;
+ }
 
-echo $legislation_date;
+//echo $legislation_date;
 
-//echo $event_id."<br>";
-//echo $title."<br>";
-//echo $subtitle."<br>";
-//echo $description."<br>";
-//echo $pro_environment_vote."<br>";
-//echo "SYNOPSIS:" . $synopsis;
 
 
 if(!$adding){
@@ -120,8 +130,6 @@ $sql_legislation = mysqli_query($link, $str_legislation);
 // add or edit desired_vote_type
 $sql_desired_vote_type = mysqli_query($link, $str_desired_vote_type);
 
-// echo $str_desired_vote_type. "<br>";
-// echo $str_legislation;
 
 
 $kounter=0;
@@ -135,32 +143,40 @@ if ($adding){
 
 	}
 	$str_tbl_votes=$str1.substr($str2,0,-2);
-	echo $str_tbl_votes;
+	//	echo $str_tbl_votes;
 	$sql_tbl_votes=mysqli_query($link, $str_tbl_votes);
 }else{
 	foreach ( $_POST as $key => $value ){
 		$kounter ++;
 		$str_tbl_votes="";
 		if ($kounter >5){
-// 	 		 echo "<br>$key : $value ";
+
 			$str_tbl_votes.="update tbl_votes set vote_type_id='".$value."' where voter_id='".$key."' and legislation_id='".$legislation_id."'";
-//echo $str_tbl_votes;			
+
 			if ($sql_tbl_votes=mysqli_query($link, $str_tbl_votes)){
-//			echo " : yes";
-//			}else{
-//			echo "no";
+
 			}
 			
 		}
 	}
 }
 //echo "<br>".$str_tbl_votes;
-
+//echo "at end";
 // xxx
- if (!$errors) { header('Location: bill_detail.php?legislation_id='.$legislation_id.'');
-} else {
-header('Location: errors.php?errormsgs='.urlencode($errormsgs));
+ if (empty($errormsgs)) { 
 
+header('Location: bill_detail.php?legislation_id='.$legislation_id.'');
+} 
+
+
+else {
+// must have errors
+	 $_SESSION['haderrors'] = 1;
+ header('Location: errors.php?errormsgs='.urlencode($errormsgs));
 }
+
+
+
+
 
 ?>
