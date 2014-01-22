@@ -295,7 +295,7 @@ unset($_SESSION["VOTE" . $row_voters["id"]]);
 			if ($row_vote_types["id"]==$row_voters["vote_type_id"])
 
 { 
-//$checked=" CHECKED ";
+$checked=" CHECKED ";
 } else {
 $checked = " ";
 }
