@@ -1,0 +1,27 @@
+
+
+
+
+The code in this repo is what is running the site at scorecard.montgomerycountygreenparty.org.  It is not yet
+made "generic" to use for other sites, although with some programming you can certainly do so. To use it you
+need to create a Mysql database using the sql script given here, and install the php etc files in an apache web server
+with php support. The connection php file will contain the connection information to connect to the database. The 
+intended use is to have a pretty fixed sets of issues and voters that votes belong to. The votes can be edited and maintained by
+the end users, who come in two levels (see the user manual). To edit the voters and issues themselves requires using something
+to connect to mysql and manipulating the tables. Eventually these tables should have a user interface to edit them.
+
+
+There is code in here that reflects some other possible scenarios that were not realized and should be ignored or
+eventually removed.
+
+There is a branch that has a postgresql version of the code, but it is out of date relative to the mysql code.
+
+The application-specific values for logo, title, colors, etc, are not well separated from the code. That is something
+else that needs to be done to make it more usable for other sites.
+
+The passwords are stored as SHA-256 hashes so to set an initial password for a user you will need to use a function
+that will do that conversion.
+
+The intention is for this to be a usable tool for people keeping track of voting records of organizations in general. It
+is licensed under GNU Affero GPL and forks and contributions are welcomed. The goal is to have something online to
+keep elected officials accountable.
