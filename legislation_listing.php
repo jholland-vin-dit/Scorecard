@@ -99,7 +99,14 @@ echo "<td valign=top  bgcolor=lightgreen>".$row_legislation["description"]."</td
 
 
 if ($_SESSION["user"]) { 
-echo "<td valign=top  bgcolor=lightgreen><a href='edit_legislation.php?legislation_id=".$row_legislation["id"]."'>edit</a>&nbsp;&nbsp;&nbsp;<a href='delete_legislation.php?legislation_id=".$row_legislation["id"]."'>delete</a></td>";
+
+echo "<td valign=top  bgcolor=lightgreen>";
+
+if (!$row_legislation["published"]) { 
+echo " <a href='edit_legislation.php?legislation_id=".$row_legislation["id"]."'>edit</a>&nbsp;&nbsp;&nbsp;<a href='delete_legislation.php?legislation_id=".$row_legislation["id"]."'>delete</a>";
+} 
+//users can't edit published entries
+echo "</td>";
 
 echo "</tr>";
 echo "</tr><tr><td colspan=4 valign=top bgcolor=papayawhip>".$row_legislation["synopsis"]."</td><td>&nbsp;</td></tr>";

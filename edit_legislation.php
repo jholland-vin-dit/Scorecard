@@ -232,13 +232,13 @@ echo "</td></tr><tr>";
 echo "<td valign=top  bgcolor=#ACFA58> ";
 echo "Description: </td>"; 
 echo "<td valign=top  bgcolor=#ACFA58>";
-echo "<textarea cols='50' rows='10' name='description'>".$description."</textarea></td></tr>";
+echo "<textarea cols='80' rows='10' name='description'>".$description."</textarea></td></tr>";
 echo "<tr>";
 
 echo "<td valign=top  bgcolor=#ACFA58> ";
 echo "Further Information and Contacts: </td>"; 
 echo "<td valign=top  bgcolor=#ACFA58>";
-echo "<textarea cols='50' rows='10' name='synopsis'>".$synopsis."</textarea></td></tr>";
+echo "<textarea cols='80' rows='10' name='synopsis'>".$synopsis."</textarea></td></tr>";
 
 echo "<tr><td colspan=2>";
 echo "<table class=bottomtable>";

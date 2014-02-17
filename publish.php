@@ -40,7 +40,11 @@ foreach ($_POST as $key => $value){
 	    $sql_query = mysqli_query($link, $query);
 	}
 }
-}
+}  
+echo "cosmo";
+	$datequery = "update lastmod set lastmod=now();";
+	$sql_query = mysqli_query($link, $datequery);
+	echo $datequery;
     header('Location: legislation_listing.php?issue_id=' . $_POST["issue_id_save"]) ;
 ?>
 

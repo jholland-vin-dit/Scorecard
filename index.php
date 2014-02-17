@@ -54,12 +54,11 @@ selectObj.form.submit();
 <?php  include 'common.php'; ?>
 
 
-<table class="bottomtable"  ><tr><td width="100%" align=\"center\">
+<table border="0" class="bottomtable"  ><tr><td width="100%" align=\"center\">
   <?php //include 'http://192.168.61.98/Scorecard/voters_ratings.php' . '?issue_id=0&heading_clause=' . urlencode($heading_clause)   ; 
  
  
- $issue_id = $_GET["issue_id"];
-
+ //$issue_id = $_GET["issue_id"];
 
 $str_ratings = "select voter_id,last_name,first_name,party_name, district, ";
 $str_ratings .= "if(all_votes=0,0,floor(.5+100*(good_votes/all_votes))) percentage ";
@@ -140,12 +139,14 @@ echo "</table>\n";
       }
      echo "<br>";
      $sql_issues=
-"select issues.title title, subtitle, synopsis, name, issues.id as issue_id, \n" .
-"issues.description, issues.pro_environment_vote from tbl_issues issues " . 
-" inner join tbl_big_issues big_issues on issues.big_issue_id=big_issues.id " .
-" order by issues.title desc ;";
+" select issues.title title, subtitle, synopsis, name, issues.id as issue_id,  \n" . 
+" issues.description, issues.pro_environment_vote  \n" .
+",(select count(*) from tbl_legislation legislation where legislation.issue_id = issues.id and published <> 0) published_count \n" .
+" from tbl_issues issues \n" .
+"  inner join tbl_big_issues big_issues on issues.big_issue_id=big_issues.id  \n" . " order by issues.title desc  " ;
+
       echo "<table class=\"bottomtablenowidth\">\n";
-      echo "<tr><td><font size=\"4\"><i>Click on an issue to see individual bills:</i></font></td></tr>\n";
+      echo "<tr><td><font size=\"4\"><i>Click on a blue issue to see individual bills:</i></font></td></tr>\n";
     $current_color=$color1;
     $color_toggle=true;
 
@@ -167,9 +168,15 @@ echo "</table>\n";
 
       echo "<tr>\n";
         if ($sql_legislation = mysqli_query($link, $str_legislation)){
-               echo "<td valign=top bgcolor=".$current_color."><font size=4><b>\n";
+               echo "<td valign=top bgcolor=".$current_color."><font size=4>\n";
+
+ if ($row_issues["published_count"] > 0 ) {
             echo "<a href=\"legislation_listing.php?issue_id=".$row_issues["issue_id"]."\">\n";
-            echo "<span style=\"font-size:larger\";>" .$row_issues["title"]."</span></a></b></font>\n";
+            echo "<span style=\"font-size:larger\";>" .$row_issues["title"]."</span></a></font>\n";
+
+ } else {
+            echo "<span style=\"font-size:small;\">" . $row_issues["title"]."</span></font>\n";
+}
             echo "</td></tr>\n";
         } // if sql_legislation
        } //while
@@ -183,9 +190,19 @@ echo "</table>\n";
 
     ?>
 
-</td></tr><tr><td>
-Published by <a href="http://www.montgomerycountygreenparty.org">Montgomery County Green Party</a> </td><td align="right" width="200px">
-<a href="about.php">About&nbsp;this&nbsp;scorecard</a>
+</td></tr><tr><td width="20%"><table class="bottomtable"><tr><td>
+Published by <a href="http://www.montgomerycountygreenparty.org">Montgomery County Green Party</a> </td><td width="60%" align="left">Last modified:
+
+<?php
+$str_lastmod = "SELECT DATE_FORMAT(max(lastmod) , '%W %M %Y %H:%i:%s') thedate from lastmod;";
+$sql_lastmod = mysqli_query($link, $str_lastmod);
+while($row_lastmod = mysqli_fetch_assoc($sql_lastmod)){
+echo " " . $row_lastmod["thedate"];
+}
+?>
+
+</td></tr></table></td><td width="20%" align="right" width="200px">
+<a href="about.html">About&nbsp;this&nbsp;scorecard</a>
 </tr></td></table>
 </body>
 </html>

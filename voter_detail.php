@@ -120,25 +120,32 @@ $alternate_shade = false;
   echo "<tr><th style=\"width:200px;\">Bill</th><th>Description</th><th>Member Vote</th><th>Bill Number</th><th style=\"width:100px;\">Date</th></tr>";
     while($row_votes = mysqli_fetch_assoc($sql_bill)){
      if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
-           $span = " style=\"background-color:" . $bgcolor1 . ";\"";
+//           $span = " style=\"background-color:" . $bgcolor1 . ";\"";
+	$alt="Desired Vote";
+	$icon = "images/greencheck.png";
   } else {
-           $span=" style=\"background-color:" . $bgcolor2 . ";\"";
+ //          $span=" style=\"background-color:" . $bgcolor2 . ";\"";
+	$alt="Wrong Vote";
+	$icon = "images/redcheck.png";
   }
   $span = str_replace("#","",$span);
   
-  $vote_text = "<td ".$span. ">".$row_votes["vote"]."</td>";
-  $name_text = "<a href='bill_detail.php?legislation_id=".$row_votes["legislation_id"]."'>".$row_votes["legislation_name"]."</a>";
+  $vote_text = "<td ".$span. ">".$row_votes["vote"]."<img height=\"32\" width=\"32\" src=\"".$icon."\" alt=\"$alt\" title=\"$alt\"></td>";
+  $name_text = "<a href='bill_detail.php?legislation_id=".$row_votes["legislation_id"]."'>"."<span style=\"font-size:larger\">" . $row_votes["legislation_name"]."/<span></a>";
     $number_text = $row_votes["bill_number"];
   if ($alternate_shade) {
   echo "<tr>" ;
   }
   else {
-  echo  "<tr style=\"background-color:#99CC99\">";
+  echo  "<tr style=\"background-color:#AADDAA\">";
 }
   $alternate_shade = !$alternate_shade;
 echo "<td>";
 
-  echo $name_text."</td><td>" . $row_votes["description"]."</td>\n";
+
+
+  echo  $name_text."</td>";
+echo "<td>" . $row_votes["description"]."</td>\n";
   echo  $vote_text  . "<td>".$number_text."</td><td>" . $row_votes["legislation_date"] . "</td>";
 
   echo "       </tr>\n";

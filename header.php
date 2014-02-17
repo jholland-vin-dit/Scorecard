@@ -65,15 +65,15 @@ if ($sql_body = mysqli_query($link, $str_body)) {
 $row_body = mysqli_fetch_assoc($sql_body);
 
 echo "<table style=\"background-color:198a1d;\"  width=840 cellpadding=0 cellspacing=0 border=0 align=center>";
-echo "<tr><td align=\"left\"><img  style=\"width:8%;height:8%;position:absolute;z-index:2;\" src=\"images/mocologo.gif\">";
-echo "</td></tr><tr><td align=\"center\"><span style=\"color:d5d761;font-size:large;font-weight:200;\">Green Party of Montgomery County, Maryland</span></td></tr>";
+echo "<tr><td rowspan=\"2\" align=\"center\" valign=\"center\" width=\"20%\"><br><img  style=\"width:48%;height:48%;\" src=\"images/mocologo.gif\">";
+echo "</td><td align=\"center\" valign=\"top\" ><span style=\"color:d5d761;font-size:large;font-weight:200;\">Green Party of Montgomery County, Maryland</span></td><td width=\"20%\">&nbsp;</td></tr>";
 
 
 echo "<tr><td align=\"center\">";
 echo "<span style=\"font-weight:200;font-size:x-large;\">";
 echo $row_body["name"] ;
 echo "</span>";
-echo "</td>" ;
+echo "</td><td width=\"20%\">&nbsp;</td>" ;
 echo "</tr>";
 if ($page_name <> "index.php") {
 echo "<tr><td>";
