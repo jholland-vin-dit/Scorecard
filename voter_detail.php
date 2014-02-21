@@ -122,16 +122,20 @@ $alternate_shade = false;
      if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
 //           $span = " style=\"background-color:" . $bgcolor1 . ";\"";
 	$alt="Desired Vote";
-	$icon = "images/greencheck.png";
-  } else {
+	$icon = "<img height=\"32\" width=\"32\" src=\"images/greencheck.png\" alt=\"$alt\" title=\"$alt\">";
+  } else if ($row_votes["vote_type_id"] != -1 ){ // --not N/A
  //          $span=" style=\"background-color:" . $bgcolor2 . ";\"";
 	$alt="Wrong Vote";
-	$icon = "images/redcheck.png";
+	$icon = "<img height=\"32\" width=\"32\" src=\"images/redx.png\" alt=\"$alt\" title=\"$alt\">";
+"<img height=\"32\" width=\"32\" src=\"".$icon."\" alt=\"$alt\" title=\"$alt\">";
+
+} else {
+	$icon="";
   }
   $span = str_replace("#","",$span);
   
-  $vote_text = "<td ".$span. ">".$row_votes["vote"]."<img height=\"32\" width=\"32\" src=\"".$icon."\" alt=\"$alt\" title=\"$alt\"></td>";
-  $name_text = "<a href='bill_detail.php?legislation_id=".$row_votes["legislation_id"]."'>"."<span style=\"font-size:larger\">" . $row_votes["legislation_name"]."/<span></a>";
+  $vote_text = "<td ".$span. ">".$row_votes["vote"].$icon. "</td>";
+  $name_text = "<a href='bill_detail.php?legislation_id=".$row_votes["legislation_id"]."'>"."<span style=\"font-size:larger\">" . $row_votes["legislation_name"]."</span></a>";
     $number_text = $row_votes["bill_number"];
   if ($alternate_shade) {
   echo "<tr>" ;
@@ -146,7 +150,13 @@ echo "<td>";
 
   echo  $name_text."</td>";
 echo "<td>" . $row_votes["description"]."</td>\n";
-  echo  $vote_text  . "<td>".$number_text."</td><td>" . $row_votes["legislation_date"] . "</td>";
+  echo  $vote_text  . "<td>".$number_text."</td><td align=\"center\">";
+
+if ($row_votes["legislation_date"]  == "0000-00-00") {
+echo "TBD" ; } else {
+echo $row_votes["legislation_date"] ;
+}
+echo "</td>";
 
   echo "       </tr>\n";
     }  // while votes

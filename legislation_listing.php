@@ -94,7 +94,14 @@ echo "<td valign=top bgcolor=lightblue width=25%><a href=\"bill_detail.php?legis
 
 
 
-echo "<td valign=top>".$row_legislation["bill_number"]."</td><td valign=top   >".$row_legislation["legislation_date"]."</td>";
+echo "<td valign=top>".$row_legislation["bill_number"]."</td><td valign=top   >";
+if ($row_legislation["legislation_date"]  == "0000-00-00") {
+echo "TBD" ; } else {
+echo $row_legislation["legislation_date"] ;
+}
+
+
+echo "</td>";
 echo "<td valign=top  bgcolor=lightgreen>".$row_legislation["description"]."</td>";}
 
 

@@ -28,7 +28,7 @@ About the County Council Scorecard:<br>
 </center>
 <br>
 <br>
-The votes in this scorecard were chosen with the assistance of the activist leaders on many issues.  They are the votes where the definitive support or opposition to an issue became clear, and where the real decision was made.  The critical vote may occur on an amendment, in committee, or on final bill passage. The final responsibility for choosing which votes is with the Montgomery County Green Party. Anyone can verify the accuracy of the votes with the Montgomery County Council website, at ????, searching on the date, bill number, and legislative proposal detail.
+The votes in this scorecard were chosen with the assistance of the activist leaders on many issues.  They are the votes where the definitive support or opposition to an issue became clear, and where the real decision was made.  The critical vote may occur on an amendment, in committee, or on final bill passage. The final responsibility for choosing which votes is with the Montgomery County Green Party. 
 
 <br>
 

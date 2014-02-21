@@ -169,13 +169,14 @@ echo "</table>\n";
       echo "<tr>\n";
         if ($sql_legislation = mysqli_query($link, $str_legislation)){
                echo "<td valign=top bgcolor=".$current_color."><font size=4>\n";
-
- if ($row_issues["published_count"] > 0 ) {
+//show issues as links if a user or root so can edit them
+ if ($row_issues["published_count"] > 0  || isset($_SESSION['user']) || isset($_SESSION['root']))
+ {
             echo "<a href=\"legislation_listing.php?issue_id=".$row_issues["issue_id"]."\">\n";
             echo "<span style=\"font-size:larger\";>" .$row_issues["title"]."</span></a></font>\n";
 
  } else {
-            echo "<span style=\"font-size:small;\">" . $row_issues["title"]."</span></font>\n";
+            echo "<span style=\"font-size:medium;\">" . $row_issues["title"]."&nbsp;&nbsp; <span style=\"font-size:small;\"><em>Votes TBD</em></span></span></font>\n";
 }
             echo "</td></tr>\n";
         } // if sql_legislation
@@ -194,7 +195,7 @@ echo "</table>\n";
 Published by <a href="http://www.montgomerycountygreenparty.org">Montgomery County Green Party</a> </td><td width="60%" align="left">Last modified:
 
 <?php
-$str_lastmod = "SELECT DATE_FORMAT(max(lastmod) , '%W %M %Y %H:%i:%s') thedate from lastmod;";
+$str_lastmod = "SELECT DATE_FORMAT(max(lastmod) , '%W %M %D %Y %H:%i:%s') thedate from lastmod;";
 $sql_lastmod = mysqli_query($link, $str_lastmod);
 while($row_lastmod = mysqli_fetch_assoc($sql_lastmod)){
 echo " " . $row_lastmod["thedate"];

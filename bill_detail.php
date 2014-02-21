@@ -153,7 +153,14 @@ echo "<tr><td colspan=3><hr></td></tr>";
 <tr><td> Bill #:
 <?php echo $row_body["bill_number"];?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Voting Body:
 <?php echo $row_body["voting_body_name"]; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date:
-<?php echo $row_body["legislation_date"] ?></td></tr>
+<?php  
+if ($row_body["legislation_date"]  == "0000-00-00") {
+echo "TBD" ; } else { 
+echo $row_body["legislation_date"] ;
+}
+
+
+?></td></tr>
 
 </table>
 </body>
