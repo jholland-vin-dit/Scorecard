@@ -27,6 +27,16 @@ $_SESSION["issue_id"]=$issue_id;
 $body_year = $_SESSION["body_year"];
 ?>
 <?php include 'header.php'; ?>
+
+<script language="Javascript">
+function confirm_delete(url) {
+	var r=confirm("Delete this issue, and all votes and information about it?");
+	if (r==true) {	
+	window.open(url);
+	}
+} 
+</script>	
+
 <?php 
 // get and print issue
 $str_issue = "select * from tbl_issues issues ";
@@ -110,7 +120,10 @@ if ($_SESSION["user"]) {
 echo "<td valign=top  bgcolor=lightgreen>";
 
 if (!$row_legislation["published"]) { 
-echo " <a href='edit_legislation.php?legislation_id=".$row_legislation["id"]."'>edit</a>&nbsp;&nbsp;&nbsp;<a href='delete_legislation.php?legislation_id=".$row_legislation["id"]."'>delete</a>";
+?>
+
+ <a href="edit_legislation.php?legislation_id=<?php echo $row_legislation["id"]?>">edit</a>&nbsp;&nbsp;&nbsp;<a href="javascript:confirm_delete('delete_legislation.php?legislation_id=<?php echo $row_legislation["id"] ?>')">delete</a>
+<?php 
 } 
 //users can't edit published entries
 echo "</td>";

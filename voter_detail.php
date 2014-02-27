@@ -119,7 +119,8 @@ $alternate_shade = false;
     echo "<table class=bottomtable>\n";
   echo "<tr><th style=\"width:200px;\">Bill</th><th>Description</th><th>Member Vote</th><th>Bill Number</th><th style=\"width:100px;\">Date</th></tr>";
     while($row_votes = mysqli_fetch_assoc($sql_bill)){
-     if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]) {
+     if ($row_votes["vote_type_id"] == $row_votes["desired_vote_type_id"]
+&& $row_votes["desired_vote_type_id"] != -1) {
 //           $span = " style=\"background-color:" . $bgcolor1 . ";\"";
 	$alt="Desired Vote";
 	$icon = "<img height=\"32\" width=\"32\" src=\"images/greencheck.png\" alt=\"$alt\" title=\"$alt\">";

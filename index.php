@@ -76,8 +76,6 @@ $str_ratings .= "left join mtx_voters_bodies voters_bodies on voters_bodies.vote
 $str_ratings .= "where voters_bodies.year=" . $body_year ;
 $str_ratings .= " and votes.vote_type_id <> -1" ; // N/A's don't count
 $str_ratings .= " and legislation.published=1" ; 
-
-
 if ($issue_id <> 0) {
 $str_ratings .= " and legislation.issue_id = " . $issue_id ;
 }
@@ -86,7 +84,6 @@ $str_ratings .= ")  ";
 $str_ratings .= "subquery order by percentage desc, last_name,first_name ; ";
 
 
-//echo $str_ratings;
 
 
 $sql_ratings = mysqli_query($link, $str_ratings);
@@ -173,10 +170,10 @@ echo "</table>\n";
  if ($row_issues["published_count"] > 0  || isset($_SESSION['user']) || isset($_SESSION['root']))
  {
             echo "<a href=\"legislation_listing.php?issue_id=".$row_issues["issue_id"]."\">\n";
-            echo "<span style=\"font-size:larger\";>" .$row_issues["title"]."</span></a></font>\n";
+            echo "<span style=\"font-size:14pt;\">" .$row_issues["title"]."</span></a></font>\n";
 
  } else {
-            echo "<span style=\"font-size:medium;\">" . $row_issues["title"]."&nbsp;&nbsp; <span style=\"font-size:small;\"><em>Votes TBD</em></span></span></font>\n";
+            echo "<span style=\"font-size:14pt;\">" . $row_issues["title"]."&nbsp;&nbsp; <span style=\"font-size:small;\"><em>Votes TBD</em></span></span></font>\n";
 }
             echo "</td></tr>\n";
         } // if sql_legislation
@@ -195,7 +192,7 @@ echo "</table>\n";
 Published by <a href="http://www.montgomerycountygreenparty.org">Montgomery County Green Party</a> </td><td width="60%" align="left">Last modified:
 
 <?php
-$str_lastmod = "SELECT DATE_FORMAT(max(lastmod) , '%W %M %D %Y %H:%i:%s') thedate from lastmod;";
+$str_lastmod = "SELECT DATE_FORMAT(max(lastmod) , '%W %M %D %Y %H:%i') thedate from lastmod;";
 $sql_lastmod = mysqli_query($link, $str_lastmod);
 while($row_lastmod = mysqli_fetch_assoc($sql_lastmod)){
 echo " " . $row_lastmod["thedate"];
