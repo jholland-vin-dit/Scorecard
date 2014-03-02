@@ -23,28 +23,27 @@ session_start();
 $page_name="publish.php";
 $page_title = "Voter Scorecard Publish Action";
 ?>
-<?php  include 'header.php'; // need this for db connection ?>
+<?php  include 'connection_string.php'; // need this for db connection ?>
 <?php  $submitted_username = '';
-    echo "hello";
+//    echo "hello";
     if(!empty($_POST))
     {
- print_r($_POST); 
+//  print_r($_POST); 
 
 foreach ($_POST as $key => $value){
 	if ( ereg('published.*',$key)) {
-	echo "<br>" . $key . "<br>" . $value . "<br>";
+//	echo "<br>" . $key . "<br>" . $value . "<br>";
 
 	$query =  "UPDATE `tbl_legislation` set published = " . $value . " where id=" . substr($key,9);
 
-	echo $query;
+//	echo $query;
 	    $sql_query = mysqli_query($link, $query);
 	}
 }
 }  
-echo "cosmo";
 	$datequery = "update lastmod set lastmod=now();";
 	$sql_query = mysqli_query($link, $datequery);
-	echo $datequery;
+	//echo $datequery;
     header('Location: legislation_listing.php?issue_id=' . $_POST["issue_id_save"]) ;
 ?>
 
